@@ -1,0 +1,79 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.main-header {
+    background-color: #0044cc;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero {
+    background: #f4f4f4;
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.features, .pricing, .demo {
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.features-container, .pricing-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.feature, .pricing-plan {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 5px;
+    max-width: 300px;
+    text-align: left;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #0044cc;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin: 1rem 0;
+}
+
+.btn-secondary {
+    background-color: #ff6600;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
