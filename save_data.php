@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     file_put_contents("data.txt", $user_input . "\n", FILE_APPEND);
     
     // Redirect to bye page after submission
-    header("Location: bye.php");
+    header("Location: bye.html");
     exit();
 }
 ?>
