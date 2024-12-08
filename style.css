@@ -383,7 +383,7 @@ header .container .content .extra-nav button:hover .icon {
 
 .about {
   min-height: 100vh;
-  background: url("/assets/about.jpeg");
+  background: url("/assets/comp1.jpg");
   background-size: cover;
   overflow: hidden;
 }
@@ -725,7 +725,7 @@ header .container .content .extra-nav button:hover .icon {
   grid-column: span 2 / span 2;
   grid-row: span 2 / span 2;
   grid-column-start: 3;
-  background: url("/assets/saturn.jpeg");
+  background: url("/assets/tools.jpg");
 }
 
 .destination .container .content .moon {
