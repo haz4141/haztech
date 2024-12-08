@@ -721,7 +721,7 @@ header .container .content .extra-nav button:hover .icon {
   grid-row: span 2 / span 2;
 }
 
-.destination .container .content .tools {
+.destination .container .content .saturn {
   grid-column: span 2 / span 2;
   grid-row: span 2 / span 2;
   grid-column-start: 3;
