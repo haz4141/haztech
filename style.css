@@ -98,6 +98,25 @@ header .container .content {
   align-items: center;
 }
 
+.dashboard-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+}
+
+.dashboard-link:hover {
+  background: var(--primary);
+  color: var(--black);
+  transform: scale(1.05);
+}
+
 header .container .content .logo {
   display: flex;
   justify-content: center;
@@ -1081,6 +1100,296 @@ footer p {
   
   .hero .container .content .text p {
     font-size: 1rem;
+  }
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: var(--black);
+  margin: 5% auto;
+  padding: 2rem;
+  border: 2px solid var(--primary);
+  border-radius: 20px;
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close {
+  color: var(--white);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+.close:hover {
+  color: var(--primary);
+}
+
+/* Services Grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 1px solid var(--primary);
+  transition: all 0.3s ease;
+}
+
+.service-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(130, 200, 229, 0.3);
+}
+
+.service-item h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.service-item ul {
+  list-style: none;
+  margin-bottom: 1.5rem;
+}
+
+.service-item ul li {
+  padding: 0.5rem 0;
+  color: var(--white);
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.service-item ul li:before {
+  content: "✓";
+  color: var(--primary);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.service-item button {
+  background: var(--primary);
+  color: var(--black);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.service-item button:hover {
+  background: var(--secondary);
+  transform: scale(1.05);
+}
+
+/* Calculator Styles */
+.calculator {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.calc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.calc-section label {
+  color: var(--white);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.calc-section select,
+.calc-section input {
+  padding: 0.8rem;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.calc-section select:focus,
+.calc-section input:focus {
+  outline: none;
+  border-color: var(--secondary);
+}
+
+.calc-result {
+  background: rgba(130, 200, 229, 0.1);
+  padding: 1.5rem;
+  border-radius: 15px;
+  border: 2px solid var(--primary);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.calc-result h3 {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.calc-result button {
+  background: var(--primary);
+  color: var(--black);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.calc-result button:hover {
+  background: var(--secondary);
+  transform: scale(1.05);
+}
+
+/* Enhanced Button Styles */
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--primary);
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.btn-secondary:hover {
+  background: var(--primary);
+  color: var(--black);
+  transform: scale(1.05);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.about-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+/* Contact Info Styles */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--white);
+}
+
+.contact-item i {
+  color: var(--primary);
+  width: 20px;
+}
+
+/* Enhanced Card Interactions */
+.reason .card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reason .card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(130, 200, 229, 0.2);
+}
+
+/* Form Enhancements */
+.contact .container .content .right-side form select {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--white);
+  outline: none;
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.contact .container .content .right-side form select option {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Loading Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+    padding: 1.5rem;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-buttons,
+  .about-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-secondary {
+    margin-left: 0;
+    margin-top: 1rem;
   }
 }
 

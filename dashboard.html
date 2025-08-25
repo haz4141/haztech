@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HazTech Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .dashboard {
+            background: var(--black);
+            min-height: 100vh;
+            color: var(--white);
+        }
+        
+        .dashboard-header {
+            background: rgba(130, 200, 229, 0.1);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dashboard-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--white);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            background: var(--primary);
+            color: var(--black);
+        }
+        
+        .dashboard-content {
+            padding: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: var(--white);
+            margin-top: 0.5rem;
+        }
+        
+        .data-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .table-header {
+            background: var(--primary);
+            color: var(--black);
+            padding: 1rem;
+            font-weight: bold;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+        
+        .table-row:hover {
+            background: rgba(130, 200, 229, 0.1);
+        }
+        
+        .action-btn {
+            background: var(--primary);
+            color: var(--black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn.delete {
+            background: #f44336;
+            color: white;
+        }
+        
+        .form-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            margin-top: 1rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--white);
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-nav">
+                <div class="dashboard-title">
+                    <i data-feather="settings"></i>
+                    HazTech Dashboard
+                </div>
+                <div class="nav-tabs">
+                    <button class="nav-tab active" onclick="showTab('overview')">Overview</button>
+                    <button class="nav-tab" onclick="showTab('bookings')">Bookings</button>
+                    <button class="nav-tab" onclick="showTab('services')">Services</button>
+                    <button class="nav-tab" onclick="showTab('customers')">Customers</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalBookings">0</div>
+                        <div class="stat-label">Total Bookings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingServices">0</div>
+                        <div class="stat-label">Pending Services</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRevenue">$0</div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeCustomers">0</div>
+                        <div class="stat-label">Active Customers</div>
+                    </div>
+                </div>
+                
+                <h3>Recent Activity</h3>
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>Customer</div>
+                            <div>Service</div>
+                            <div>Date</div>
+                            <div>Status</div>
+                            <div>Actions</div>
+                        </div>
+                    </div>
+                    <div id="recentActivity">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bookings Tab -->
+            <div id="bookings" class="tab-content hidden">
+                <h2>Service Bookings</h2>
+                <button class="action-btn" onclick="showAddBookingForm()">Add New Booking</button>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>Customer</div>
+                            <div>Service</div>
+                            <div>Device Count</div>
+                            <div>Priority</div>
+                            <div>Estimated Cost</div>
+                            <div>Status</div>
+                            <div>Actions</div>
+                        </div>
+                    </div>
+                    <div id="bookingsList">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+                
+                <div id="addBookingForm" class="form-section hidden">
+                    <h3>Add New Booking</h3>
+                    <form id="bookingForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input type="text" name="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Service Type</label>
+                                <select name="serviceType" required>
+                                    <option value="">Select Service</option>
+                                    <option value="networking">Computer & Networking</option>
+                                    <option value="repairs">Phone Repairs</option>
+                                    <option value="security">Cybersecurity</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Device Count</label>
+                                <input type="number" name="deviceCount" min="1" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Priority</label>
+                                <select name="priority" required>
+                                    <option value="normal">Normal</option>
+                                    <option value="urgent">Urgent</option>
+                                    <option value="emergency">Emergency</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="status" required>
+                                    <option value="pending">Pending</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Notes</label>
+                                <textarea name="notes" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="action-btn">Add Booking</button>
+                        <button type="button" class="action-btn" onclick="hideAddBookingForm()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Services Tab -->
+            <div id="services" class="tab-content hidden">
+                <h2>Service Management</h2>
+                <button class="action-btn" onclick="showAddServiceForm()">Add New Service</button>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>Service Name</div>
+                            <div>Base Price</div>
+                            <div>Per Device</div>
+                            <div>Urgent Multiplier</div>
+                            <div>Emergency Multiplier</div>
+                            <div>Actions</div>
+                        </div>
+                    </div>
+                    <div id="servicesList">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customers Tab -->
+            <div id="customers" class="tab-content hidden">
+                <h2>Customer Management</h2>
+                
+                <div class="data-table">
+                    <div class="table-header">
+                        <div class="table-row">
+                            <div>Name</div>
+                            <div>Email</div>
+                            <div>Phone</div>
+                            <div>Total Bookings</div>
+                            <div>Total Spent</div>
+                            <div>Actions</div>
+                        </div>
+                    </div>
+                    <div id="customersList">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            loadDashboardData();
+        });
+        
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.remove('hidden');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Load data for the selected tab
+            switch(tabName) {
+                case 'overview':
+                    loadOverviewData();
+                    break;
+                case 'bookings':
+                    loadBookingsData();
+                    break;
+                case 'services':
+                    loadServicesData();
+                    break;
+                case 'customers':
+                    loadCustomersData();
+                    break;
+            }
+        }
+        
+        // Load dashboard data
+        function loadDashboardData() {
+            // Simulate loading data from server
+            setTimeout(() => {
+                document.getElementById('totalBookings').textContent = '24';
+                document.getElementById('pendingServices').textContent = '8';
+                document.getElementById('totalRevenue').textContent = '$2,450';
+                document.getElementById('activeCustomers').textContent = '15';
+                
+                loadRecentActivity();
+            }, 500);
+        }
+        
+        // Load recent activity
+        function loadRecentActivity() {
+            const recentActivity = [
+                { customer: 'John Doe', service: 'Computer Repair', date: '2024-01-15', status: 'Completed' },
+                { customer: 'Jane Smith', service: 'Phone Repair', date: '2024-01-14', status: 'In Progress' },
+                { customer: 'Mike Johnson', service: 'Network Setup', date: '2024-01-13', status: 'Pending' }
+            ];
+            
+            const container = document.getElementById('recentActivity');
+            container.innerHTML = '';
+            
+            recentActivity.forEach(activity => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${activity.customer}</div>
+                    <div>${activity.service}</div>
+                    <div>${activity.date}</div>
+                    <div>${activity.status}</div>
+                    <div>
+                        <button class="action-btn" onclick="viewDetails('${activity.customer}')">View</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Load bookings data
+        function loadBookingsData() {
+            const bookings = [
+                { customer: 'John Doe', service: 'Computer Repair', devices: 1, priority: 'Normal', cost: '$50', status: 'Completed' },
+                { customer: 'Jane Smith', service: 'Phone Repair', devices: 2, priority: 'Urgent', cost: '$108', status: 'In Progress' },
+                { customer: 'Mike Johnson', service: 'Network Setup', devices: 3, priority: 'Normal', cost: '$125', status: 'Pending' }
+            ];
+            
+            const container = document.getElementById('bookingsList');
+            container.innerHTML = '';
+            
+            bookings.forEach(booking => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${booking.customer}</div>
+                    <div>${booking.service}</div>
+                    <div>${booking.devices}</div>
+                    <div>${booking.priority}</div>
+                    <div>${booking.cost}</div>
+                    <div>${booking.status}</div>
+                    <div>
+                        <button class="action-btn" onclick="editBooking('${booking.customer}')">Edit</button>
+                        <button class="action-btn delete" onclick="deleteBooking('${booking.customer}')">Delete</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Load services data
+        function loadServicesData() {
+            const services = [
+                { name: 'Computer & Networking', basePrice: '$50', perDevice: '$25', urgent: '1.5x', emergency: '2.5x' },
+                { name: 'Phone Repairs', basePrice: '$30', perDevice: '$20', urgent: '1.8x', emergency: '3.0x' },
+                { name: 'Cybersecurity', basePrice: '$100', perDevice: '$50', urgent: '1.3x', emergency: '2.0x' }
+            ];
+            
+            const container = document.getElementById('servicesList');
+            container.innerHTML = '';
+            
+            services.forEach(service => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${service.name}</div>
+                    <div>${service.basePrice}</div>
+                    <div>${service.perDevice}</div>
+                    <div>${service.urgent}</div>
+                    <div>${service.emergency}</div>
+                    <div>
+                        <button class="action-btn" onclick="editService('${service.name}')">Edit</button>
+                        <button class="action-btn delete" onclick="deleteService('${service.name}')">Delete</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Load customers data
+        function loadCustomersData() {
+            const customers = [
+                { name: 'John Doe', email: 'john@example.com', phone: '+60-123-4567', bookings: 3, spent: '$150' },
+                { name: 'Jane Smith', email: 'jane@example.com', phone: '+60-234-5678', bookings: 2, spent: '$108' },
+                { name: 'Mike Johnson', email: 'mike@example.com', phone: '+60-345-6789', bookings: 1, spent: '$125' }
+            ];
+            
+            const container = document.getElementById('customersList');
+            container.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${customer.name}</div>
+                    <div>${customer.email}</div>
+                    <div>${customer.phone}</div>
+                    <div>${customer.bookings}</div>
+                    <div>${customer.spent}</div>
+                    <div>
+                        <button class="action-btn" onclick="viewCustomer('${customer.name}')">View</button>
+                        <button class="action-btn" onclick="editCustomer('${customer.name}')">Edit</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+        
+        // Form management
+        function showAddBookingForm() {
+            document.getElementById('addBookingForm').classList.remove('hidden');
+        }
+        
+        function hideAddBookingForm() {
+            document.getElementById('addBookingForm').classList.add('hidden');
+            document.getElementById('bookingForm').reset();
+        }
+        
+        // Form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate form submission
+            alert('Booking added successfully!');
+            hideAddBookingForm();
+            loadBookingsData();
+        });
+        
+        // Action functions
+        function viewDetails(customer) {
+            alert(`Viewing details for ${customer}`);
+        }
+        
+        function editBooking(customer) {
+            alert(`Editing booking for ${customer}`);
+        }
+        
+        function deleteBooking(customer) {
+            if (confirm(`Are you sure you want to delete the booking for ${customer}?`)) {
+                alert(`Booking for ${customer} deleted successfully!`);
+                loadBookingsData();
+            }
+        }
+        
+        function editService(service) {
+            alert(`Editing service: ${service}`);
+        }
+        
+        function deleteService(service) {
+            if (confirm(`Are you sure you want to delete the service: ${service}?`)) {
+                alert(`Service ${service} deleted successfully!`);
+                loadServicesData();
+            }
+        }
+        
+        function viewCustomer(customer) {
+            alert(`Viewing customer: ${customer}`);
+        }
+        
+        function editCustomer(customer) {
+            alert(`Editing customer: ${customer}`);
+        }
+        
+        // Load overview data
+        function loadOverviewData() {
+            loadRecentActivity();
+        }
+    </script>
+</body>
+</html>
