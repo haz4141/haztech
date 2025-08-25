@@ -173,10 +173,30 @@ header .container .content .extra-nav button:hover .icon {
 .hero {
   position: relative;
   min-height: 100vh;
-  background: url("/assets/bg.jpeg");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  background-size: 400% 400%;
+  animation: heroGradient 25s ease infinite;
   overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(130, 200, 229, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+@keyframes heroGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero::after {
@@ -264,12 +284,28 @@ header .container .content .extra-nav button:hover .icon {
   bottom: -80%;
   width: 70em;
   height: 70em;
-  background-image: url("/assets/moon.jpg");
-  background-size: 200% 100%;
+  background: radial-gradient(circle, rgba(130, 200, 229, 0.1) 0%, rgba(118, 75, 162, 0.05) 50%, transparent 100%);
+  border: 2px solid rgba(130, 200, 229, 0.3);
   border-radius: 50%;
-  filter: brightness(75%);
-  box-shadow: inset 8em -8em 8em 8em #000, 2.5em -.5em 4em #fff;
-  animation: up .8s linear, rotate 90s linear infinite;
+  animation: digitalPulse 4s ease-in-out infinite;
+  box-shadow: 
+    0 0 50px rgba(130, 200, 229, 0.2),
+    inset 0 0 50px rgba(130, 200, 229, 0.1);
+}
+
+@keyframes digitalPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 
+      0 0 50px rgba(130, 200, 229, 0.2),
+      inset 0 0 50px rgba(130, 200, 229, 0.1);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 
+      0 0 80px rgba(130, 200, 229, 0.4),
+      inset 0 0 80px rgba(130, 200, 229, 0.2);
+  }
 }
 
 @keyframes color {
@@ -402,9 +438,31 @@ header .container .content .extra-nav button:hover .icon {
 
 .about {
   min-height: 100vh;
-  background: url("/assets/comp1.jpg");
-  background-size: cover;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  background-size: 400% 400%;
+  animation: techGradient 20s ease infinite;
   overflow: hidden;
+  position: relative;
+}
+
+.about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(130, 200, 229, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(240, 147, 251, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+@keyframes techGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .about .content {
   display: flex; /* Align content horizontally */
@@ -753,11 +811,25 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 1;
   grid-row-start: 3;
   padding: 1rem;
-  background: url("/assets/moon.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-size: 200% 200%;
+  animation: techShift 8s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .moon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(130, 200, 229, 0.2) 0%, transparent 50%);
 }
 
 .destination .container .content .eyropa {
@@ -765,11 +837,25 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 3;
   grid-row-start: 3;
   padding: 1rem;
-  background: url("/assets/eyropa.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background-size: 200% 200%;
+  animation: techShift 10s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .eyropa::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.2) 0%, transparent 50%);
 }
 
 .destination .container .content .mercury {
@@ -777,11 +863,30 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 4;
   grid-row-start: 3;
   padding: 1rem;
-  background: url("/assets/mercury.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background-size: 200% 200%;
+  animation: techShift 12s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .mercury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 60% 40%, rgba(79, 172, 254, 0.2) 0%, transparent 50%);
+}
+
+@keyframes techShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .destination .container .content .blackhole {
@@ -790,11 +895,25 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 1;
   grid-row-start: 5;
   padding: 1rem;
-  background: url("/assets/blackhole.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  background-size: 300% 300%;
+  animation: techShift 15s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .blackhole::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(130, 200, 229, 0.3) 0%, transparent 70%),
+    radial-gradient(circle at 20% 80%, rgba(118, 75, 162, 0.2) 0%, transparent 50%);
 }
 
 .destination .container .content .titan {
@@ -802,11 +921,25 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 3;
   grid-row-start: 5;
   padding: 1rem;
-  background: url("/assets/titan.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background-size: 200% 200%;
+  animation: techShift 8s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .titan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(250, 112, 154, 0.2) 0%, transparent 50%);
 }
 
 .destination .container .content .neptune {
@@ -814,11 +947,25 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 4;
   grid-row-start: 5;
   padding: 1rem;
-  background: url("/assets/neptune.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  background-size: 200% 200%;
+  animation: techShift 10s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .neptune::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 60% 60%, rgba(168, 237, 234, 0.2) 0%, transparent 50%);
 }
 
 .destination .container .content .mars {
@@ -827,20 +974,40 @@ header .container .content .extra-nav button:hover .icon {
   grid-column-start: 3;
   grid-row-start: 7;
   padding: 1rem;
-  background: url("/assets/mars.jpeg");
-  background-size: cover;
-  background-position: center;
-  border: 2px solid var(--darkgray);
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  background-size: 200% 200%;
+  animation: techShift 12s ease infinite;
+  border: 2px solid var(--primary);
   border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.destination .container .content .mars::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 25% 75%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 25%, rgba(255, 154, 158, 0.2) 0%, transparent 50%);
 }
 
 .contact {
   position: relative;
   padding: 4rem 0;
-  background: url("/assets/contact.jpeg");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
   min-height: 80vh;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .contact::after {
