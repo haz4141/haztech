@@ -101,7 +101,6 @@ haztech/
 ├── index.html              # Main homepage with dynamic features
 ├── dashboard.html          # Admin dashboard for management
 ├── receipt.html            # Receipt generator page
-├── hzhzhz.html             # Simple form page
 ├── bye.html               # Success/thank you page
 ├── style.css              # Main stylesheet with dynamic styling
 ├── script.js              # Enhanced JavaScript functionality
