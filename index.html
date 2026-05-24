@@ -1,908 +1,999 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HazTech Digital - Professional Technology Solutions</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
+    <title>HazTech Digital — Technology Solutions</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Feather Icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
-    
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
     <style>
+        /* ── Reset ───────────────────────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        /* ── Root ────────────────────────────────────────────── */
+        :root {
+            --black:   #080808;
+            --white:   #f0ece4;
+            --grey:    #141414;
+            --mid:     #2a2a2a;
+            --dim:     #666;
+            --accent:  #82c8e5;
+        }
+
+        /* ── Cursor ──────────────────────────────────────────── */
+        * { cursor: none; }
+
+        #c-dot {
+            position: fixed;
+            width: 7px; height: 7px;
+            background: var(--white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width .25s, height .25s, opacity .25s;
+            will-change: left, top;
+        }
+        #c-ring {
+            position: fixed;
+            width: 40px; height: 40px;
+            border: 1px solid rgba(240,236,228,.35);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+        }
+        .cur-big #c-dot { width: 44px; height: 44px; opacity: .2; }
+
+        /* ── Scrollbar ───────────────────────────────────────── */
+        ::-webkit-scrollbar { width: 2px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--dim); }
+
+        /* ── Grain ───────────────────────────────────────────── */
+        #grain {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 9998;
+            opacity: .04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 300px 300px;
+        }
+
+        /* ── Body ────────────────────────────────────────────── */
         body {
+            background: var(--black);
+            color: var(--white);
             font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
         }
-        
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
+
+        /* ── Nav ─────────────────────────────────────────────── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            padding: 2rem 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 1000;
+            mix-blend-mode: difference;
         }
-        
-        /* Custom gradient backgrounds */
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        .nav-logo {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: .85rem; letter-spacing: .2em; text-transform: uppercase;
+            text-decoration: none; color: var(--white);
         }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+            color: var(--white); text-decoration: none;
+            font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+            opacity: .6; transition: opacity .2s;
         }
-        
-        /* Glassmorphism effect */
-        .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .nav-links a:hover { opacity: 1; }
+        .nav-cta {
+            opacity: 1 !important;
+            padding: .45rem 1.1rem;
+            border: 1px solid var(--white);
+            border-radius: 100px;
         }
-        
-        /* Hero animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+
+        /* ── Back-to-top ─────────────────────────────────────── */
+        #btt {
+            position: fixed; bottom: 2rem; left: 3rem; z-index: 500;
+            width: 42px; height: 42px;
+            border: 1px solid var(--mid); border-radius: 50%;
+            background: none; color: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity .3s, border-color .2s;
         }
-        
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
+        #btt:hover { border-color: var(--dim); }
+        #btt.show { opacity: 1; pointer-events: all; }
+
+        /* ── Reveal ──────────────────────────────────────────── */
+        .rv {
+            opacity: 0; transform: translateY(28px);
+            transition: opacity .9s ease, transform .9s ease;
         }
-        
-        /* Smooth scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .rv.on { opacity: 1; transform: none; }
+        .rv-d1 { transition-delay: .1s; }
+        .rv-d2 { transition-delay: .2s; }
+        .rv-d3 { transition-delay: .3s; }
+        .rv-d4 { transition-delay: .4s; }
+
+        /* ── Keyframes ───────────────────────────────────────── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(36px); }
+            to   { opacity: 1; transform: none; }
         }
-        
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
+
+        /* ═══════════════════════════════════════════════════════
+           HERO
+        ═══════════════════════════════════════════════════════ */
+        #home {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 0 3rem 4.5rem;
+            position: relative; overflow: hidden;
         }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #60a5fa;
-            border-radius: 4px;
+
+        .hero-tag {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.8rem;
+            animation: fadeUp .8s ease .15s both;
         }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #3b82f6;
+        .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--dim); }
+        .hero-tag span { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); }
+
+        .hero-h1 {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(4.5rem, 13vw, 15rem);
+            line-height: .88; letter-spacing: -.025em; text-transform: uppercase;
+            animation: fadeUp 1s ease .3s both;
         }
-        
-        /* Button hover effects */
-        .btn-primary {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+        .hero-h1 .hollow {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--white);
+            animation: fadeUp 1s ease .45s both;
         }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+
+        .hero-row {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            margin-top: 3rem; padding-top: 2rem;
+            border-top: 1px solid var(--mid);
+            animation: fadeUp .8s ease .7s both;
         }
-        
-        .btn-primary:hover::before {
-            left: 100%;
+        .hero-desc {
+            max-width: 380px; font-size: .9rem; line-height: 1.75; color: var(--dim);
         }
-        
-        /* Card hover effects */
-        .service-card {
-            transition: all 0.3s ease;
+        .hero-actions { display: flex; gap: 1rem; }
+
+        /* ── Buttons ─────────────────────────────────────────── */
+        .btn-out {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.8rem;
+            border: 1px solid var(--white); border-radius: 100px;
+            color: var(--white); text-decoration: none;
+            font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+            background: transparent;
+            transition: background .3s, color .3s;
         }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(96, 165, 250, 0.3);
+        .btn-out:hover { background: var(--white); color: var(--black); }
+
+        .btn-fill {
+            display: inline-flex; align-items: center; gap: .5rem;
+            padding: .85rem 1.8rem;
+            border: 1px solid var(--white); border-radius: 100px;
+            color: var(--black); background: var(--white);
+            font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+            transition: background .3s, color .3s;
         }
-        
-        /* Navigation scroll effect */
-        .nav-scrolled {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .btn-fill:hover { background: transparent; color: var(--white); }
+
+        /* ═══════════════════════════════════════════════════════
+           SECTION SHARED
+        ═══════════════════════════════════════════════════════ */
+        section { padding: 7rem 3rem; }
+
+        .sec-label {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 4.5rem;
         }
-        
-        /* Mobile menu animation */
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
+        .sec-label::before { content: ''; width: 28px; height: 1px; background: var(--dim); }
+        .sec-label span { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
+
+        /* ═══════════════════════════════════════════════════════
+           SERVICES
+        ═══════════════════════════════════════════════════════ */
+        #services { background: var(--black); border-top: 1px solid var(--mid); }
+
+        .svc-head {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            margin-bottom: 3rem;
         }
-        
-        .mobile-menu.active {
-            transform: translateX(0);
+        .svc-title {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(3rem, 7vw, 7rem);
+            line-height: .9; text-transform: uppercase; letter-spacing: -.025em;
+        }
+
+        /* Bento grid */
+        .svc-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 10px;
+        }
+
+        .svc-card {
+            position: relative; overflow: hidden;
+            border: 1px solid var(--mid); border-radius: 14px;
+            background: var(--grey);
+            min-height: 320px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 2rem;
+            transition: border-color .35s;
+        }
+        .svc-card:hover { border-color: var(--dim); }
+
+        .sc-1 { grid-column: span 7; }
+        .sc-2 { grid-column: span 5; }
+        .sc-3 { grid-column: span 5; }
+        .sc-4 { grid-column: span 7; }
+
+        .card-bg {
+            position: absolute; inset: 0;
+            background-size: cover; background-position: center;
+            opacity: .15;
+            transition: opacity .6s, transform .8s;
+        }
+        .svc-card:hover .card-bg { opacity: .28; transform: scale(1.06); }
+
+        .card-num {
+            font-size: .65rem; letter-spacing: .22em; color: var(--dim);
+            position: relative; z-index: 1;
+        }
+        .card-foot { position: relative; z-index: 1; }
+
+        .card-ttl {
+            font-family: 'Syne', sans-serif; font-weight: 700;
+            font-size: clamp(1.4rem, 2.8vw, 2.4rem);
+            line-height: 1.05; letter-spacing: -.02em; margin-bottom: .9rem;
+        }
+        .card-txt { font-size: .82rem; color: var(--dim); line-height: 1.7; max-width: 340px; margin-bottom: 1.2rem; }
+
+        .card-pills { display: flex; flex-wrap: wrap; gap: .45rem; }
+        .pill {
+            font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+            padding: .28rem .75rem; border: 1px solid var(--mid); border-radius: 100px; color: var(--dim);
+            transition: border-color .25s, color .25s;
+        }
+        .svc-card:hover .pill { border-color: var(--dim); color: var(--white); }
+
+        .card-cta {
+            display: inline-flex; align-items: center; gap: .45rem;
+            font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+            color: var(--white); text-decoration: none; margin-top: 1.1rem;
+            opacity: 0; transform: translateX(-8px);
+            transition: opacity .3s, transform .3s;
+        }
+        .svc-card:hover .card-cta { opacity: 1; transform: none; }
+        .card-cta svg { transition: transform .25s; }
+        .card-cta:hover svg { transform: translateX(4px); }
+
+        /* ═══════════════════════════════════════════════════════
+           ABOUT
+        ═══════════════════════════════════════════════════════ */
+        #about { border-top: 1px solid var(--mid); }
+
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 7rem; align-items: start;
+        }
+        .about-h {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(3.5rem, 7.5vw, 9rem);
+            line-height: .88; text-transform: uppercase; letter-spacing: -.03em;
+        }
+        .about-body { padding-top: .5rem; }
+        .about-p {
+            font-size: .95rem; line-height: 1.85; color: var(--dim); margin-bottom: 2rem;
+        }
+        .about-p strong { color: var(--white); font-weight: 400; }
+
+        .stats {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 2rem; margin-bottom: 3rem;
+            padding-top: 2rem; border-top: 1px solid var(--mid);
+        }
+        .stat-v {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: 3.2rem; line-height: 1; margin-bottom: .25rem;
+        }
+        .stat-l { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+
+        .about-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        /* ═══════════════════════════════════════════════════════
+           CONTACT
+        ═══════════════════════════════════════════════════════ */
+        #contact { border-top: 1px solid var(--mid); }
+
+        .ct-h {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(3.5rem, 9vw, 11rem);
+            line-height: .88; text-transform: uppercase; letter-spacing: -.03em;
+            margin-bottom: 5rem;
+        }
+        .ct-h .hollow {
+            color: transparent; -webkit-text-stroke: 1.5px var(--white);
+        }
+
+        .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start; }
+
+        .ct-rows {}
+        .ct-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.4rem 0; border-bottom: 1px solid var(--mid);
+        }
+        .ct-row:first-child { border-top: 1px solid var(--mid); }
+        .ct-lbl { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+        .ct-val { font-size: .88rem; }
+
+        .ct-social { display: flex; gap: 1.5rem; margin-top: 2.5rem; }
+        .ct-social a {
+            font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+            color: var(--dim); text-decoration: none; transition: color .2s;
+        }
+        .ct-social a:hover { color: var(--white); }
+
+        /* Form */
+        .ct-form { display: flex; flex-direction: column; }
+        .f-row { display: flex; gap: 0; }
+        .f-row .f-field { flex: 1; }
+        .f-row .f-field + .f-field { border-left: none; }
+
+        .f-field {
+            padding: 1.3rem 0; border-bottom: 1px solid var(--mid);
+            transition: border-color .3s;
+        }
+        .f-field:focus-within { border-color: var(--white); }
+        .f-field + .f-field { margin-top: 0; }
+
+        .f-field label {
+            display: block; font-size: .6rem; letter-spacing: .2em;
+            text-transform: uppercase; color: var(--dim); margin-bottom: .5rem;
+        }
+        .f-field input, .f-field select, .f-field textarea {
+            width: 100%; background: transparent; border: none; outline: none;
+            color: var(--white); font-family: 'Inter', sans-serif;
+            font-size: .95rem; font-weight: 300;
+        }
+        .f-field select option { background: var(--black); }
+        .f-field textarea { resize: none; min-height: 110px; }
+        .f-submit { margin-top: 2.5rem; }
+
+        /* ═══════════════════════════════════════════════════════
+           FOOTER
+        ═══════════════════════════════════════════════════════ */
+        footer {
+            border-top: 1px solid var(--mid);
+            padding: 2rem 3rem;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .ft-logo {
+            font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: .8rem; letter-spacing: .2em; text-transform: uppercase;
+        }
+        .ft-copy { font-size: .7rem; color: var(--dim); }
+
+        /* ═══════════════════════════════════════════════════════
+           MODALS
+        ═══════════════════════════════════════════════════════ */
+        .m-overlay {
+            position: fixed; inset: 0;
+            background: rgba(8,8,8,.96); backdrop-filter: blur(12px);
+            z-index: 5000;
+            display: flex; align-items: center; justify-content: center; padding: 2rem;
+            opacity: 0; pointer-events: none; transition: opacity .4s;
+        }
+        .m-overlay.open { opacity: 1; pointer-events: all; }
+
+        .m-box {
+            background: var(--grey); border: 1px solid var(--mid); border-radius: 16px;
+            padding: 3rem; max-width: 840px; width: 100%;
+            max-height: 88vh; overflow-y: auto;
+            transform: translateY(18px); transition: transform .4s;
+        }
+        .m-overlay.open .m-box { transform: none; }
+
+        .m-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
+        .m-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -.02em; }
+        .m-close {
+            width: 34px; height: 34px; border: 1px solid var(--mid); border-radius: 50%;
+            background: none; color: var(--white);
+            display: flex; align-items: center; justify-content: center;
+            transition: background .2s;
+        }
+        .m-close:hover { background: var(--mid); }
+
+        .m-svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
+        .m-svc {
+            border: 1px solid var(--mid); border-radius: 12px; padding: 1.5rem;
+            transition: border-color .25s;
+        }
+        .m-svc:hover { border-color: var(--dim); }
+        .m-svc h3 { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 1rem; }
+        .m-svc ul { list-style: none; margin-bottom: 1.5rem; }
+        .m-svc ul li {
+            font-size: .78rem; color: var(--dim); padding: .4rem 0;
+            border-bottom: 1px solid var(--mid);
+        }
+        .m-svc ul li:last-child { border-bottom: none; }
+        .m-svc button {
+            width: 100%; padding: .65rem; border: 1px solid var(--dim); border-radius: 100px;
+            background: none; color: var(--white);
+            font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+        .m-svc button:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+
+        /* Calc */
+        .c-field { margin-bottom: 1.5rem; }
+        .c-field label { display: block; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .55rem; }
+        .c-field select, .c-field input {
+            width: 100%; padding: .8rem 1rem;
+            background: var(--black); border: 1px solid var(--mid); border-radius: 8px;
+            color: var(--white); font-family: 'Inter', sans-serif; font-size: .9rem; outline: none;
+            transition: border-color .2s;
+        }
+        .c-field select:focus, .c-field input:focus { border-color: var(--dim); }
+        .c-field select option { background: var(--black); }
+
+        .c-result {
+            background: var(--black); border: 1px solid var(--mid); border-radius: 12px;
+            padding: 2rem; text-align: center; margin: 1.5rem 0;
+        }
+        .c-result p { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .4rem; }
+        .c-result .amt { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 3rem; }
+
+        /* ── Notifications ───────────────────────────────────── */
+        #notifs {
+            position: fixed; top: 5rem; right: 2rem; z-index: 9000;
+            display: flex; flex-direction: column; gap: .5rem;
+        }
+        .notif {
+            background: var(--grey); border: 1px solid var(--mid); border-radius: 10px;
+            padding: 1rem 1.4rem; max-width: 340px;
+            transform: translateX(110%); transition: transform .4s cubic-bezier(.16,1,.3,1);
+        }
+        .notif.in { transform: none; }
+        .notif h4 { font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 700; margin-bottom: .25rem; }
+        .notif p { font-size: .78rem; color: var(--dim); line-height: 1.5; }
+
+        /* ── Responsive ──────────────────────────────────────── */
+        @media (max-width: 900px) {
+            nav { padding: 1.5rem; }
+            .nav-links { display: none; }
+
+            #home { padding: 0 1.5rem 3.5rem; }
+            .hero-h1 { font-size: clamp(4rem, 18vw, 8rem); }
+            .hero-row { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+
+            section { padding: 5rem 1.5rem; }
+            .svc-head { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+            .svc-grid { grid-template-columns: 1fr; }
+            .sc-1,.sc-2,.sc-3,.sc-4 { grid-column: span 1; }
+
+            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .ct-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .m-svc-grid { grid-template-columns: 1fr; }
+
+            footer { padding: 1.5rem; flex-direction: column; gap: .6rem; text-align: center; }
+            #btt { left: 1.5rem; bottom: 1.5rem; }
         }
     </style>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#60a5fa',
-                        'secondary': '#818cf8',
-                        'accent': '#a78bfa',
-                        'dark': '#0f172a',
-                        'dark-lighter': '#1e293b',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="bg-slate-900 text-white">
-    
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <img src="assets/haztech-logo.png" alt="HazTech Logo" class="h-12 w-12">
-                    <span class="text-xl font-bold font-display">HAZTECH DIGITAL</span>
+<body>
+
+<!-- Grain -->
+<div id="grain"></div>
+
+<!-- Custom cursor -->
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+
+<!-- Nav -->
+<nav>
+    <a href="#home" class="nav-logo">Haztech Digital</a>
+    <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#" class="nav-cta" onclick="openServices();return false;">Get Started</a></li>
+    </ul>
+</nav>
+
+<!-- Back to top -->
+<button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M6.5 11V2M2 6.5l4.5-4.5 4.5 4.5"/>
+    </svg>
+</button>
+
+<!-- ══════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════ -->
+<section id="home">
+    <div class="hero-tag">
+        <span>Malaysia's Technology Partner</span>
+    </div>
+    <h1 class="hero-h1">
+        Haztech
+        <span class="hollow">Digital</span>
+    </h1>
+    <div class="hero-row">
+        <p class="hero-desc">
+            Bridging the gap between technology and innovation. Expert solutions in computer networking, repairs, web development, and cybersecurity.
+        </p>
+        <div class="hero-actions">
+            <a href="#services" class="btn-out">View Services</a>
+            <button class="btn-fill" onclick="openCalc()">Get Quote</button>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     SERVICES
+══════════════════════════════════════════════════════ -->
+<section id="services">
+    <div class="sec-label rv"><span>What We Do</span></div>
+    <div class="svc-head rv rv-d1">
+        <h2 class="svc-title">Our<br>Services</h2>
+        <button class="btn-out" onclick="openServices()">View All</button>
+    </div>
+
+    <div class="svc-grid">
+
+        <div class="svc-card sc-1 rv rv-d1" onclick="showDetail('networking')">
+            <div class="card-bg" style="background-image:url('assets/comp1.jpg')"></div>
+            <span class="card-num">01</span>
+            <div class="card-foot">
+                <h3 class="card-ttl">Computer &amp;<br>Networking</h3>
+                <p class="card-txt">Reliable repair and maintenance for PCs, laptops, and networks. Expert solutions for all your computing needs.</p>
+                <div class="card-pills">
+                    <span class="pill">PC Repair</span>
+                    <span class="pill">Network Setup</span>
+                    <span class="pill">Data Recovery</span>
                 </div>
-                
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="hover:text-primary transition">Home</a>
-                    <a href="#services" class="hover:text-primary transition">Services</a>
-                    <a href="#about" class="hover:text-primary transition">About</a>
-                    <a href="#contact" class="hover:text-primary transition">Contact</a>
-                    <button onclick="openServicesModal()" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-blue-500 transition btn-primary">
-                        Get Started
-                    </button>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-white">
-                    <i data-feather="menu"></i>
-                </button>
+                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('networking')">
+                    Get Quote
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
+                </a>
             </div>
         </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-slate-800 shadow-xl md:hidden z-50">
-            <div class="flex flex-col p-6 space-y-4">
-                <button id="close-mobile-menu" class="self-end text-white">
-                    <i data-feather="x"></i>
-                </button>
-                <a href="#home" class="text-white hover:text-primary transition py-2">Home</a>
-                <a href="#services" class="text-white hover:text-primary transition py-2">Services</a>
-                <a href="#about" class="text-white hover:text-primary transition py-2">About</a>
-                <a href="#contact" class="text-white hover:text-primary transition py-2">Contact</a>
-                <button onclick="openServicesModal()" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-blue-500 transition">
-                    Get Started
-                </button>
+
+        <div class="svc-card sc-2 rv rv-d2" onclick="showDetail('repairs')">
+            <div class="card-bg" style="background-image:url('assets/comp2.jpg')"></div>
+            <span class="card-num">02</span>
+            <div class="card-foot">
+                <h3 class="card-ttl">Phone<br>Repairs</h3>
+                <p class="card-txt">Expert repair services to bring your mobile devices back to life with quick turnaround times.</p>
+                <div class="card-pills">
+                    <span class="pill">Screen</span>
+                    <span class="pill">Battery</span>
+                    <span class="pill">Water Damage</span>
+                </div>
+                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('repairs')">
+                    Get Quote
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
+                </a>
             </div>
         </div>
-    </nav>
-    
-    <!-- Back to Top Button -->
-    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-blue-500 transition opacity-0 pointer-events-none z-40">
-        <i data-feather="chevron-up"></i>
-    </button>
-    
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen gradient-bg flex items-center justify-center relative overflow-hidden pt-20">
-        <!-- Animated Background Elements -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-            <div class="absolute top-40 right-10 w-72 h-72 bg-secondary rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-accent rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
-        </div>
-        
-        <div class="container mx-auto px-6 text-center relative z-10">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-5xl md:text-7xl font-bold font-display mb-6" data-aos="fade-up">
-                    Welcome to <span class="gradient-text">HazTech Digital</span>
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">
-                    Bridging the gap between <span class="text-primary font-semibold">technology</span> and 
-                    <span class="text-secondary font-semibold">innovation</span>. We provide exceptional solutions for 
-                    <span class="text-accent font-semibold">computer networking</span>, repairs, <span class="text-primary font-semibold">web development</span>, and digital services.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-                    <a href="#about" class="bg-primary text-white px-8 py-4 rounded-full hover:bg-blue-500 transition font-semibold btn-primary">
-                        Learn More
-                    </a>
-                    <button onclick="openCalculator()" class="glass text-white px-8 py-4 rounded-full hover:bg-white/10 transition font-semibold">
-                        Get Quote
-                    </button>
+
+        <div class="svc-card sc-3 rv rv-d3" onclick="showDetail('security')">
+            <div class="card-bg" style="background-image:url('assets/about.jpeg')"></div>
+            <span class="card-num">03</span>
+            <div class="card-foot">
+                <h3 class="card-ttl">Cyber-<br>security</h3>
+                <p class="card-txt">Protect your digital assets with advanced cybersecurity solutions and expert guidance.</p>
+                <div class="card-pills">
+                    <span class="pill">Audits</span>
+                    <span class="pill">Virus Removal</span>
+                    <span class="pill">Data Protection</span>
                 </div>
-            </div>
-            
-            <!-- Floating Element -->
-            <div class="mt-16 float-animation" data-aos="fade-up" data-aos-delay="300">
-                <div class="w-64 h-64 mx-auto rounded-full glass flex items-center justify-center">
-                    <div class="w-48 h-48 rounded-full bg-gradient-to-br from-primary to-secondary opacity-50"></div>
-                </div>
+                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('security')">
+                    Get Quote
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
+                </a>
             </div>
         </div>
-    </section>
-    
-    <!-- Services Section -->
-    <section id="services" class="py-20 bg-slate-800">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Our Expertise</h2>
-                <h3 class="text-4xl md:text-5xl font-bold font-display mb-4">Comprehensive Digital Solutions</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    HazTech Digital delivers cutting-edge technology, ensuring your digital presence, security, and repairs are handled professionally.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service Card 1 -->
-                <div class="service-card glass rounded-2xl p-8 cursor-pointer" data-aos="fade-up" data-aos-delay="100" onclick="showServiceDetails('networking')">
-                    <div class="text-6xl mb-6">💻</div>
-                    <h4 class="text-2xl font-bold mb-4">Computer & Networking</h4>
-                    <p class="text-gray-400 mb-6">
-                        Reliable repair and maintenance for PCs, laptops, and networks. Expert solutions for all your computing needs.
-                    </p>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            PC/Laptop Repair
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Network Setup
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Data Recovery
-                        </li>
-                    </ul>
-                    <button onclick="event.stopPropagation(); getQuote('networking')" class="mt-6 w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                        Get Quote
-                    </button>
+
+        <div class="svc-card sc-4 rv rv-d4" onclick="showDetail('webdev')">
+            <div class="card-bg" style="background-image:url('assets/tools.jpg')"></div>
+            <span class="card-num">04</span>
+            <div class="card-foot">
+                <h3 class="card-ttl">Web<br>Development</h3>
+                <p class="card-txt">Custom digital experiences built with modern technologies. From concept to deployment.</p>
+                <div class="card-pills">
+                    <span class="pill">Design</span>
+                    <span class="pill">Development</span>
+                    <span class="pill">SEO</span>
                 </div>
-                
-                <!-- Service Card 2 -->
-                <div class="service-card glass rounded-2xl p-8 cursor-pointer" data-aos="fade-up" data-aos-delay="200" onclick="showServiceDetails('repairs')">
-                    <div class="text-6xl mb-6">🛠️</div>
-                    <h4 class="text-2xl font-bold mb-4">Phone Repairs</h4>
-                    <p class="text-gray-400 mb-6">
-                        Expert repair services to bring your mobile devices back to life with quick turnaround times.
-                    </p>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Screen Replacement
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Battery Replacement
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Water Damage Repair
-                        </li>
-                    </ul>
-                    <button onclick="event.stopPropagation(); getQuote('repairs')" class="mt-6 w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                        Get Quote
-                    </button>
-                </div>
-                
-                <!-- Service Card 3 -->
-                <div class="service-card glass rounded-2xl p-8 cursor-pointer" data-aos="fade-up" data-aos-delay="300" onclick="showServiceDetails('security')">
-                    <div class="text-6xl mb-6">🔒</div>
-                    <h4 class="text-2xl font-bold mb-4">Cybersecurity</h4>
-                    <p class="text-gray-400 mb-6">
-                        Protect your digital assets with our advanced cybersecurity solutions and expert guidance.
-                    </p>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Security Audits
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Virus Removal
-                        </li>
-                        <li class="flex items-center">
-                            <i data-feather="check" class="w-5 h-5 text-primary mr-2"></i>
-                            Data Protection
-                        </li>
-                    </ul>
-                    <button onclick="event.stopPropagation(); getQuote('security')" class="mt-6 w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                        Get Quote
-                    </button>
-                </div>
+                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('webdev')">
+                    Get Quote
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
+                </a>
             </div>
         </div>
-    </section>
-    
-    <!-- About Section -->
-    <section id="about" class="py-20 gradient-bg">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Text Content -->
-                <div data-aos="fade-right">
-                    <h2 class="text-sm font-semibold text-primary uppercase tracking-wider mb-3">About HazTech</h2>
-                    <h3 class="text-4xl md:text-5xl font-bold font-display mb-6">Your Digital Transformation Partner</h3>
-                    <p class="text-gray-300 text-lg mb-8">
-                        Led by CEO Mohd Hazami Hasnah, HazTech Digital is at the forefront of providing
-                        innovative solutions in repairs, multimedia services, cybersecurity, web development, and software development.
-                    </p>
-                    <p class="text-gray-400 mb-8">
-                        With years of experience in the technology industry, we've helped countless businesses and individuals 
-                        achieve their digital goals. Our commitment to excellence and customer satisfaction sets us apart.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="#contact" class="bg-primary text-white px-8 py-4 rounded-full hover:bg-blue-500 transition font-semibold text-center btn-primary flex items-center justify-center">
-                            <i data-feather="mail" class="w-5 h-5 mr-2"></i>
-                            Contact Us
-                        </a>
-                        <button onclick="loadTeamInfo()" class="glass text-white px-8 py-4 rounded-full hover:bg-white/10 transition font-semibold flex items-center justify-center">
-                            <i data-feather="users" class="w-5 h-5 mr-2"></i>
-                            Meet Our Team
-                        </button>
-                    </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════════════════ -->
+<section id="about">
+    <div class="sec-label rv"><span>About</span></div>
+    <div class="about-grid">
+        <div class="rv rv-d1">
+            <h2 class="about-h">Your Digital Partner</h2>
+        </div>
+        <div class="about-body rv rv-d2">
+            <p class="about-p">
+                Led by CEO <strong>Mohd Hazami Hasnah</strong>, HazTech Digital is at the forefront of providing innovative solutions in repairs, multimedia, cybersecurity, web development, and software.
+            </p>
+            <p class="about-p">
+                With years of experience in the technology industry, we've helped <strong>countless businesses and individuals</strong> achieve their digital goals. Our commitment to excellence sets us apart.
+            </p>
+            <div class="stats">
+                <div>
+                    <div class="stat-v">500+</div>
+                    <div class="stat-l">Projects Completed</div>
                 </div>
-                
-                <!-- Image/Logo -->
-                <div class="flex justify-center" data-aos="fade-left">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-primary rounded-full filter blur-3xl opacity-20"></div>
-                        <img src="assets/hzt-logo.png" alt="HazTech Logo" class="relative w-full max-w-md rounded-2xl">
-                    </div>
+                <div>
+                    <div class="stat-v">98%</div>
+                    <div class="stat-l">Client Satisfaction</div>
+                </div>
+                <div>
+                    <div class="stat-v">24/7</div>
+                    <div class="stat-l">Support Available</div>
+                </div>
+                <div>
+                    <div class="stat-v">10+</div>
+                    <div class="stat-l">Years Experience</div>
                 </div>
             </div>
-            
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20" data-aos="fade-up">
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-primary mb-2">500+</div>
-                    <div class="text-gray-400">Projects Completed</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-primary mb-2">98%</div>
-                    <div class="text-gray-400">Client Satisfaction</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-primary mb-2">24/7</div>
-                    <div class="text-gray-400">Support Available</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-primary mb-2">10+</div>
-                    <div class="text-gray-400">Years Experience</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-slate-800">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Contact Info -->
-                <div data-aos="fade-right">
-                    <h2 class="text-4xl md:text-5xl font-bold font-display mb-6">Get in Touch</h2>
-                    <p class="text-gray-400 text-lg mb-8">
-                        Connect with HazTech today and let us handle your digital needs. We're here to help you succeed.
-                    </p>
-                    
-                    <div class="space-y-6">
-                        <div class="flex items-start">
-                            <div class="bg-primary/20 p-3 rounded-lg mr-4">
-                                <i data-feather="phone" class="w-6 h-6 text-primary"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-1">Phone</h4>
-                                <p class="text-gray-400">+60-XXX-XXXX</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-primary/20 p-3 rounded-lg mr-4">
-                                <i data-feather="mail" class="w-6 h-6 text-primary"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-1">Email</h4>
-                                <p class="text-gray-400">info@haztechdigital.com</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start">
-                            <div class="bg-primary/20 p-3 rounded-lg mr-4">
-                                <i data-feather="map-pin" class="w-6 h-6 text-primary"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-1">Location</h4>
-                                <p class="text-gray-400">Malaysia</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Social Media -->
-                    <div class="mt-8">
-                        <h4 class="font-semibold mb-4">Follow Us</h4>
-                        <div class="flex space-x-4">
-                            <a href="#" class="bg-primary/20 p-3 rounded-lg hover:bg-primary/30 transition">
-                                <i data-feather="facebook" class="w-5 h-5 text-primary"></i>
-                            </a>
-                            <a href="#" class="bg-primary/20 p-3 rounded-lg hover:bg-primary/30 transition">
-                                <i data-feather="twitter" class="w-5 h-5 text-primary"></i>
-                            </a>
-                            <a href="#" class="bg-primary/20 p-3 rounded-lg hover:bg-primary/30 transition">
-                                <i data-feather="instagram" class="w-5 h-5 text-primary"></i>
-                            </a>
-                            <a href="#" class="bg-primary/20 p-3 rounded-lg hover:bg-primary/30 transition">
-                                <i data-feather="linkedin" class="w-5 h-5 text-primary"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Contact Form -->
-                <div data-aos="fade-left">
-                    <form id="contactForm" class="glass rounded-2xl p-8">
-                        <h3 class="text-2xl font-bold mb-6">Send us a Message</h3>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="name" class="block text-sm font-medium mb-2">Name</label>
-                                <input type="text" id="name" name="name" required 
-                                    class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-medium mb-2">Email</label>
-                                <input type="email" id="email" name="email" required 
-                                    class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                            </div>
-                        </div>
-                        
-                        <div class="mb-4">
-                            <label for="service" class="block text-sm font-medium mb-2">Service Required</label>
-                            <select id="service" name="service" required 
-                                class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                                <option value="">Select a service</option>
-                                <option value="networking">Computer & Networking</option>
-                                <option value="repairs">Phone Repairs</option>
-                                <option value="security">Cybersecurity</option>
-                                <option value="webdev">Web Development</option>
-                                <option value="consultation">Consultation</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <label for="message" class="block text-sm font-medium mb-2">Message</label>
-                            <textarea id="message" name="message" rows="5" required 
-                                class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="w-full bg-primary text-white py-4 rounded-full hover:bg-blue-500 transition font-semibold btn-primary">
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="bg-slate-900 py-8">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-gray-400">&copy; 2025 HazTech Digital Enterprise. All Rights Reserved.</p>
-        </div>
-    </footer>
-    
-    <!-- Services Modal -->
-    <div id="servicesModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" data-aos="zoom-in">
-            <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold font-display">Our Services</h2>
-                    <button onclick="closeServicesModal()" class="text-gray-400 hover:text-white transition">
-                        <i data-feather="x" class="w-8 h-8"></i>
-                    </button>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Service 1 -->
-                    <div class="glass rounded-xl p-6">
-                        <h3 class="text-xl font-bold mb-4 text-primary">Computer & Networking</h3>
-                        <ul class="space-y-2 text-gray-300 mb-6">
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                PC/Laptop Repair
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Network Setup
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Data Recovery
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                System Maintenance
-                            </li>
-                        </ul>
-                        <button onclick="getQuote('networking')" class="w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                            Get Quote
-                        </button>
-                    </div>
-                    
-                    <!-- Service 2 -->
-                    <div class="glass rounded-xl p-6">
-                        <h3 class="text-xl font-bold mb-4 text-primary">Phone Repairs</h3>
-                        <ul class="space-y-2 text-gray-300 mb-6">
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Screen Replacement
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Battery Replacement
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Water Damage Repair
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Software Issues
-                            </li>
-                        </ul>
-                        <button onclick="getQuote('repairs')" class="w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                            Get Quote
-                        </button>
-                    </div>
-                    
-                    <!-- Service 3 -->
-                    <div class="glass rounded-xl p-6">
-                        <h3 class="text-xl font-bold mb-4 text-primary">Cybersecurity</h3>
-                        <ul class="space-y-2 text-gray-300 mb-6">
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Security Audits
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Virus Removal
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Data Protection
-                            </li>
-                            <li class="flex items-center">
-                                <i data-feather="check-circle" class="w-5 h-5 text-primary mr-2"></i>
-                                Security Training
-                            </li>
-                        </ul>
-                        <button onclick="getQuote('security')" class="w-full bg-primary text-white py-3 rounded-full hover:bg-blue-500 transition font-semibold">
-                            Get Quote
-                        </button>
-                    </div>
-                </div>
+            <div class="about-btns">
+                <a href="#contact" class="btn-out">Contact Us</a>
+                <button class="btn-out" onclick="loadTeam()">Meet The Team</button>
             </div>
         </div>
     </div>
-    
-    <!-- Calculator Modal -->
-    <div id="calculatorModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-800 rounded-2xl max-w-2xl w-full" data-aos="zoom-in">
-            <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold font-display">Service Calculator</h2>
-                    <button onclick="closeCalculator()" class="text-gray-400 hover:text-white transition">
-                        <i data-feather="x" class="w-8 h-8"></i>
-                    </button>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════════════════ -->
+<section id="contact">
+    <div class="sec-label rv"><span>Contact</span></div>
+    <h2 class="ct-h rv rv-d1">
+        Get In<br><span class="hollow">Touch</span>
+    </h2>
+    <div class="ct-grid">
+        <div class="rv rv-d2">
+            <div class="ct-rows">
+                <div class="ct-row">
+                    <span class="ct-lbl">Phone</span>
+                    <span class="ct-val">+60-XXX-XXXX</span>
                 </div>
-                
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Service Type</label>
-                        <select id="calcService" onchange="calculatePrice()" 
-                            class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                            <option value="">Select Service</option>
-                            <option value="networking">Computer & Networking</option>
-                            <option value="repairs">Phone Repairs</option>
-                            <option value="security">Cybersecurity</option>
-                            <option value="webdev">Web Development</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Device Count</label>
-                        <input type="number" id="deviceCount" min="1" value="1" onchange="calculatePrice()" 
-                            class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Priority Level</label>
-                        <select id="priority" onchange="calculatePrice()" 
-                            class="w-full bg-slate-700/50 border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition">
-                            <option value="normal">Normal (3-5 days)</option>
-                            <option value="urgent">Urgent (1-2 days) +50%</option>
-                            <option value="emergency">Emergency (Same day) +100%</option>
-                        </select>
-                    </div>
-                    
-                    <div class="bg-primary/20 rounded-xl p-6 text-center">
-                        <p class="text-gray-400 mb-2">Estimated Cost</p>
-                        <p class="text-4xl font-bold text-primary" id="estimatedCost">$0</p>
-                    </div>
-                    
-                    <button onclick="bookService()" class="w-full bg-primary text-white py-4 rounded-full hover:bg-blue-500 transition font-semibold btn-primary">
-                        Book Service
-                    </button>
+                <div class="ct-row">
+                    <span class="ct-lbl">Email</span>
+                    <span class="ct-val">info@haztechdigital.com</span>
                 </div>
+                <div class="ct-row">
+                    <span class="ct-lbl">Location</span>
+                    <span class="ct-val">Malaysia</span>
+                </div>
+                <div class="ct-row">
+                    <span class="ct-lbl">Hours</span>
+                    <span class="ct-val">Mon–Sat, 9am–6pm</span>
+                </div>
+            </div>
+            <div class="ct-social">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+                <a href="#">LinkedIn</a>
+            </div>
+        </div>
+
+        <div class="rv rv-d3">
+            <form id="contactForm" class="ct-form">
+                <div class="f-row">
+                    <div class="f-field" style="margin-right:2rem">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="f-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                    </div>
+                </div>
+                <div class="f-field">
+                    <label for="service">Service Required</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <option value="networking">Computer &amp; Networking</option>
+                        <option value="repairs">Phone Repairs</option>
+                        <option value="security">Cybersecurity</option>
+                        <option value="webdev">Web Development</option>
+                        <option value="consultation">Consultation</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="f-field">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea>
+                </div>
+                <div class="f-submit">
+                    <button type="submit" class="btn-fill">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <span class="ft-logo">Haztech Digital</span>
+    <span class="ft-copy">&copy; 2025 HazTech Digital Enterprise. All Rights Reserved.</span>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     SERVICES MODAL
+══════════════════════════════════════════════════════ -->
+<div id="svcModal" class="m-overlay">
+    <div class="m-box">
+        <div class="m-head">
+            <h2 class="m-title">Our Services</h2>
+            <button class="m-close" onclick="closeServices()">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l9 9M10 1L1 10"/></svg>
+            </button>
+        </div>
+        <div class="m-svc-grid">
+            <div class="m-svc">
+                <h3>Computer &amp; Networking</h3>
+                <ul>
+                    <li>PC/Laptop Repair</li>
+                    <li>Network Setup</li>
+                    <li>Data Recovery</li>
+                    <li>System Maintenance</li>
+                </ul>
+                <button onclick="getQuote('networking')">Get Quote</button>
+            </div>
+            <div class="m-svc">
+                <h3>Phone Repairs</h3>
+                <ul>
+                    <li>Screen Replacement</li>
+                    <li>Battery Replacement</li>
+                    <li>Water Damage Repair</li>
+                    <li>Software Issues</li>
+                </ul>
+                <button onclick="getQuote('repairs')">Get Quote</button>
+            </div>
+            <div class="m-svc">
+                <h3>Cybersecurity</h3>
+                <ul>
+                    <li>Security Audits</li>
+                    <li>Virus Removal</li>
+                    <li>Data Protection</li>
+                    <li>Security Training</li>
+                </ul>
+                <button onclick="getQuote('security')">Get Quote</button>
             </div>
         </div>
     </div>
-    
-    <!-- Notification Container -->
-    <div id="notification-container" class="fixed top-20 right-4 z-50 space-y-4"></div>
-    
-    <!-- Scripts -->
-    <script>
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            AOS.init({
-                duration: 800,
-                once: true,
-                offset: 100
-            });
-            feather.replace();
-        });
-        
-        // Navigation scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            const backToTop = document.getElementById('back-to-top');
-            
-            if (window.scrollY > 100) {
-                navbar.classList.add('nav-scrolled');
-                backToTop.classList.remove('opacity-0', 'pointer-events-none');
-            } else {
-                navbar.classList.remove('nav-scrolled');
-                backToTop.classList.add('opacity-0', 'pointer-events-none');
-            }
-        });
-        
-        // Back to top
-        document.getElementById('back-to-top').addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        
-        // Mobile menu
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const closeMobileMenu = document.getElementById('close-mobile-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.add('active');
-        });
-        
-        closeMobileMenu.addEventListener('click', function() {
-            mobileMenu.classList.remove('active');
-        });
-        
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.remove('active');
-            });
-        });
-        
-        // Service pricing data
-        const servicePricing = {
-            networking: { base: 50, perDevice: 25, urgent: 1.5, emergency: 2.5 },
-            repairs: { base: 30, perDevice: 20, urgent: 1.8, emergency: 3.0 },
-            security: { base: 100, perDevice: 50, urgent: 1.3, emergency: 2.0 },
-            webdev: { base: 500, perDevice: 200, urgent: 1.4, emergency: 2.0 }
-        };
-        
-        // Modal functions
-        function openServicesModal() {
-            document.getElementById('servicesModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => feather.replace(), 100);
-        }
-        
-        function closeServicesModal() {
-            document.getElementById('servicesModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-        
-        function openCalculator() {
-            document.getElementById('calculatorModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            calculatePrice();
-            setTimeout(() => feather.replace(), 100);
-        }
-        
-        function closeCalculator() {
-            document.getElementById('calculatorModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-        
-        // Close modals when clicking outside
-        document.getElementById('servicesModal').addEventListener('click', function(e) {
-            if (e.target === this) closeServicesModal();
-        });
-        
-        document.getElementById('calculatorModal').addEventListener('click', function(e) {
-            if (e.target === this) closeCalculator();
-        });
-        
-        // Calculate price
-        function calculatePrice() {
-            const serviceType = document.getElementById('calcService').value;
-            const deviceCount = parseInt(document.getElementById('deviceCount').value) || 1;
-            const priority = document.getElementById('priority').value;
-            
-            if (!serviceType) {
-                document.getElementById('estimatedCost').textContent = '$0';
-                return;
-            }
-            
-            const pricing = servicePricing[serviceType];
-            let basePrice = pricing.base + (pricing.perDevice * (deviceCount - 1));
-            
-            switch(priority) {
-                case 'urgent':
-                    basePrice *= pricing.urgent;
-                    break;
-                case 'emergency':
-                    basePrice *= pricing.emergency;
-                    break;
-            }
-            
-            document.getElementById('estimatedCost').textContent = `$${Math.round(basePrice)}`;
-        }
-        
-        // Get quote
-        function getQuote(serviceType) {
-            closeServicesModal();
-            openCalculator();
-            document.getElementById('calcService').value = serviceType;
-            calculatePrice();
-        }
-        
-        // Book service
-        function bookService() {
-            const serviceType = document.getElementById('calcService').value;
-            const deviceCount = document.getElementById('deviceCount').value;
-            const priority = document.getElementById('priority').value;
-            const cost = document.getElementById('estimatedCost').textContent;
-            
-            if (!serviceType) {
-                showNotification('Error', 'Please select a service type', 'error');
-                return;
-            }
-            
-            // Pre-fill contact form
-            document.getElementById('service').value = serviceType;
-            document.getElementById('message').value = `Service Request:\n- Type: ${serviceType}\n- Device Count: ${deviceCount}\n- Priority: ${priority}\n- Estimated Cost: ${cost}`;
-            
-            closeCalculator();
-            
-            // Scroll to contact form
-            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-            
-            showNotification('Success', 'Service details added to contact form', 'success');
-        }
-        
-        // Show service details
-        function showServiceDetails(serviceType) {
-            const serviceInfo = {
-                networking: {
-                    title: "Computer & Networking Services",
-                    description: "Comprehensive computer and networking solutions for businesses and individuals including hardware repair, network setup, data recovery, and system maintenance."
-                },
-                repairs: {
-                    title: "Phone Repair Services",
-                    description: "Expert mobile device repair services including screen replacement, battery replacement, water damage repair, and software troubleshooting with quick turnaround times."
-                },
-                security: {
-                    title: "Cybersecurity Solutions",
-                    description: "Advanced security measures to protect your digital assets including security audits, virus removal, data protection, firewall configuration, and security training."
-                }
-            };
-            
-            const service = serviceInfo[serviceType];
-            if (service) {
-                showNotification(service.title, service.description, 'info');
-            }
-        }
-        
-        // Load team info
-        function loadTeamInfo() {
-            showNotification(
-                'Meet Our Team',
-                'CEO: Mohd Hazami Hasnah - Leading HazTech Digital with expertise in Digital Transformation and Cybersecurity. Our dedicated team of IT specialists provides expert solutions in computer repair, network setup, and phone repairs.',
-                'info'
-            );
-        }
-        
-        // Contact form submission
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            
-            // Simulate form submission
-            setTimeout(() => {
-                e.target.reset();
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                
-                showNotification('Success!', 'Your message has been sent successfully. We\'ll get back to you soon.', 'success');
-            }, 1500);
-        });
-        
-        // Notification system
-        function showNotification(title, message, type = 'info') {
-            const colors = {
-                success: 'bg-green-500',
-                error: 'bg-red-500',
-                info: 'bg-blue-500'
-            };
-            
-            const notification = document.createElement('div');
-            notification.className = `${colors[type]} text-white px-6 py-4 rounded-lg shadow-lg max-w-md transform transition-all duration-300 translate-x-full`;
-            notification.innerHTML = `
-                <div class="flex items-start justify-between">
-                    <div>
-                        <h4 class="font-bold mb-1">${title}</h4>
-                        <p class="text-sm">${message}</p>
-                    </div>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            const container = document.getElementById('notification-container');
-            container.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.classList.remove('translate-x-full');
-            }, 100);
-            
-            setTimeout(() => {
-                notification.classList.add('translate-x-full');
-                setTimeout(() => notification.remove(), 300);
-            }, 5000);
-        }
-        
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-        
-        // Update feather icons after dynamic content
-        setInterval(() => feather.replace(), 1000);
-    </script>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CALCULATOR MODAL
+══════════════════════════════════════════════════════ -->
+<div id="calcModal" class="m-overlay">
+    <div class="m-box" style="max-width:500px">
+        <div class="m-head">
+            <h2 class="m-title">Service Calculator</h2>
+            <button class="m-close" onclick="closeCalc()">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l9 9M10 1L1 10"/></svg>
+            </button>
+        </div>
+        <div class="c-field">
+            <label>Service Type</label>
+            <select id="calcSvc" onchange="calcPrice()">
+                <option value="">Select Service</option>
+                <option value="networking">Computer &amp; Networking</option>
+                <option value="repairs">Phone Repairs</option>
+                <option value="security">Cybersecurity</option>
+                <option value="webdev">Web Development</option>
+            </select>
+        </div>
+        <div class="c-field">
+            <label>Device Count</label>
+            <input type="number" id="devCount" min="1" value="1" onchange="calcPrice()">
+        </div>
+        <div class="c-field">
+            <label>Priority Level</label>
+            <select id="priority" onchange="calcPrice()">
+                <option value="normal">Normal (3–5 days)</option>
+                <option value="urgent">Urgent (1–2 days) +50%</option>
+                <option value="emergency">Emergency (Same day) +100%</option>
+            </select>
+        </div>
+        <div class="c-result">
+            <p>Estimated Cost</p>
+            <span class="amt" id="estCost">$0</span>
+        </div>
+        <button class="btn-fill" style="width:100%" onclick="bookService()">Book Service</button>
+    </div>
+</div>
+
+<!-- Notifications -->
+<div id="notifs"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════ -->
+<script>
+// ── Cursor ──────────────────────────────────────────────
+const dot  = document.getElementById('c-dot');
+const ring = document.getElementById('c-ring');
+let mx=0, my=0, rx=0, ry=0;
+
+document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+});
+
+(function tick() {
+    rx += (mx - rx) * .11;
+    ry += (my - ry) * .11;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(tick);
+})();
+
+document.querySelectorAll('a,button,[onclick]').forEach(el => {
+    el.addEventListener('mouseenter', () => { dot.style.width='42px'; dot.style.height='42px'; dot.style.opacity='.2'; });
+    el.addEventListener('mouseleave', () => { dot.style.width='7px';  dot.style.height='7px';  dot.style.opacity='1'; });
+});
+
+// ── Scroll Reveal ────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: .12 });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+// ── Back to Top ──────────────────────────────────────────
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => {
+    btt.classList.toggle('show', window.scrollY > 400);
+});
+
+// ── Modals ───────────────────────────────────────────────
+function openServices() {
+    document.getElementById('svcModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeServices() {
+    document.getElementById('svcModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function openCalc() {
+    document.getElementById('calcModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    calcPrice();
+}
+function closeCalc() {
+    document.getElementById('calcModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('svcModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeServices(); });
+document.getElementById('calcModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeCalc(); });
+
+// ── Pricing ──────────────────────────────────────────────
+const pricing = {
+    networking: { base:50,  per:25,  urgent:1.5, emergency:2.5 },
+    repairs:    { base:30,  per:20,  urgent:1.8, emergency:3.0 },
+    security:   { base:100, per:50,  urgent:1.3, emergency:2.0 },
+    webdev:     { base:500, per:200, urgent:1.4, emergency:2.0 }
+};
+
+function calcPrice() {
+    const svc  = document.getElementById('calcSvc').value;
+    const cnt  = parseInt(document.getElementById('devCount').value) || 1;
+    const pri  = document.getElementById('priority').value;
+    const el   = document.getElementById('estCost');
+    if (!svc) { el.textContent = '$0'; return; }
+    const p = pricing[svc];
+    let cost = p.base + p.per * (cnt - 1);
+    if (pri === 'urgent')    cost *= p.urgent;
+    if (pri === 'emergency') cost *= p.emergency;
+    el.textContent = '$' + Math.round(cost);
+}
+
+function getQuote(svc) {
+    closeServices();
+    openCalc();
+    document.getElementById('calcSvc').value = svc;
+    calcPrice();
+}
+
+function bookService() {
+    const svc  = document.getElementById('calcSvc').value;
+    const cnt  = document.getElementById('devCount').value;
+    const pri  = document.getElementById('priority').value;
+    const cost = document.getElementById('estCost').textContent;
+    if (!svc) { notify('Select a service', 'Please choose a service type first.'); return; }
+    document.getElementById('service').value  = svc;
+    document.getElementById('message').value  = `Service: ${svc}\nDevices: ${cnt}\nPriority: ${pri}\nEstimate: ${cost}`;
+    closeCalc();
+    document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
+    notify('Details Added', 'Service info added to the contact form.');
+}
+
+function showDetail(svc) {
+    const info = {
+        networking: ['Computer & Networking', 'PC repair, network setup, data recovery, and system maintenance.'],
+        repairs:    ['Phone Repairs', 'Screen, battery, water damage, and software repair services.'],
+        security:   ['Cybersecurity', 'Security audits, virus removal, and data protection strategies.'],
+        webdev:     ['Web Development', 'Custom digital experiences from design to deployment.']
+    };
+    if (info[svc]) notify(info[svc][0], info[svc][1]);
+}
+
+function loadTeam() {
+    notify('Our Team', 'CEO: Mohd Hazami Hasnah — leading HazTech Digital in digital transformation and cybersecurity.');
+}
+
+// ── Contact Form ─────────────────────────────────────────
+document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    setTimeout(() => {
+        e.target.reset();
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        notify('Message Sent', "We'll get back to you shortly.");
+    }, 1400);
+});
+
+// ── Notifications ────────────────────────────────────────
+function notify(title, msg) {
+    const el = document.createElement('div');
+    el.className = 'notif';
+    el.innerHTML = `<h4>${title}</h4><p>${msg}</p>`;
+    document.getElementById('notifs').appendChild(el);
+    requestAnimationFrame(() => el.classList.add('in'));
+    setTimeout(() => {
+        el.classList.remove('in');
+        setTimeout(() => el.remove(), 420);
+    }, 5000);
+}
+
+// ── Anchor Scroll ────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
+    });
+});
+</script>
 </body>
 </html>
-
