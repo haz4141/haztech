@@ -3,630 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HazTech Digital — Technology Solutions</title>
+    <title>HazTech Digital</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
-        /* ── Reset ───────────────────────────────────────────── */
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+    /* ── Reset ──────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    * { cursor: none; }
+    html { scroll-behavior: smooth; }
 
-        /* ── Root ────────────────────────────────────────────── */
-        :root {
-            --black:   #080808;
-            --white:   #f0ece4;
-            --grey:    #141414;
-            --mid:     #2a2a2a;
-            --dim:     #666;
-            --accent:  #82c8e5;
-        }
+    /* ── Vars ───────────────────────────────────────────── */
+    :root {
+        --bg:     #050505;
+        --fg:     #efefef;
+        --border: #1c1c1c;
+        --mid:    #2e2e2e;
+        --dim:    #555;
+    }
 
-        /* ── Cursor ──────────────────────────────────────────── */
-        * { cursor: none; }
+    /* ── Base ───────────────────────────────────────────── */
+    body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        overflow-x: hidden;
+    }
 
-        #c-dot {
-            position: fixed;
-            width: 7px; height: 7px;
-            background: var(--white);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: width .25s, height .25s, opacity .25s;
-            will-change: left, top;
-        }
-        #c-ring {
-            position: fixed;
-            width: 40px; height: 40px;
-            border: 1px solid rgba(240,236,228,.35);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            will-change: left, top;
-        }
-        .cur-big #c-dot { width: 44px; height: 44px; opacity: .2; }
+    /* ── Grain ──────────────────────────────────────────── */
+    #grain {
+        position: fixed; inset: 0; z-index: 9998; pointer-events: none; opacity: .038;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 256px;
+    }
 
-        /* ── Scrollbar ───────────────────────────────────────── */
-        ::-webkit-scrollbar { width: 2px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--dim); }
+    /* ── Cursor ─────────────────────────────────────────── */
+    #dot {
+        position: fixed; width: 6px; height: 6px;
+        background: var(--fg); border-radius: 50%;
+        pointer-events: none; z-index: 10000;
+        transform: translate(-50%,-50%);
+        transition: width .28s, height .28s, opacity .28s;
+    }
+    #ring {
+        position: fixed; width: 38px; height: 38px;
+        border: 1px solid rgba(239,239,239,.28); border-radius: 50%;
+        pointer-events: none; z-index: 9999;
+        transform: translate(-50%,-50%);
+    }
 
-        /* ── Grain ───────────────────────────────────────────── */
-        #grain {
-            position: fixed; inset: 0;
-            pointer-events: none; z-index: 9998;
-            opacity: .04;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-            background-size: 300px 300px;
-        }
+    /* ── Scrollbar ──────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-thumb { background: var(--dim); }
 
-        /* ── Body ────────────────────────────────────────────── */
-        body {
-            background: var(--black);
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            font-weight: 300;
-            overflow-x: hidden;
-        }
+    /* ── Nav ────────────────────────────────────────────── */
+    nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        padding: 2rem 3rem;
+        display: flex; align-items: center; justify-content: space-between;
+        mix-blend-mode: difference;
+    }
+    .logo {
+        font-family: 'Unbounded', sans-serif; font-weight: 700;
+        font-size: .65rem; letter-spacing: .28em; text-transform: uppercase;
+        text-decoration: none; color: var(--fg);
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+        font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+        color: var(--fg); text-decoration: none; opacity: .45;
+        position: relative; transition: opacity .2s;
+    }
+    .nav-links a::after {
+        content: ''; position: absolute; bottom: -3px; left: 0; width: 100%; height: 1px;
+        background: var(--fg); transform: scaleX(0); transform-origin: left; transition: transform .3s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { transform: scaleX(1); }
 
-        /* ── Nav ─────────────────────────────────────────────── */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0;
-            padding: 2rem 3rem;
-            display: flex; align-items: center; justify-content: space-between;
-            z-index: 1000;
-            mix-blend-mode: difference;
-        }
-        .nav-logo {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: .85rem; letter-spacing: .2em; text-transform: uppercase;
-            text-decoration: none; color: var(--white);
-        }
-        .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
-        .nav-links a {
-            color: var(--white); text-decoration: none;
-            font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
-            opacity: .6; transition: opacity .2s;
-        }
-        .nav-links a:hover { opacity: 1; }
-        .nav-cta {
-            opacity: 1 !important;
-            padding: .45rem 1.1rem;
-            border: 1px solid var(--white);
-            border-radius: 100px;
-        }
+    /* ── Back to top ────────────────────────────────────── */
+    #btt {
+        position: fixed; bottom: 2.5rem; left: 3rem; z-index: 500;
+        width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+        background: none; color: var(--fg);
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; pointer-events: none; transition: opacity .3s, border-color .2s;
+    }
+    #btt:hover { border-color: var(--mid); }
+    #btt.show { opacity: 1; pointer-events: all; }
 
-        /* ── Back-to-top ─────────────────────────────────────── */
-        #btt {
-            position: fixed; bottom: 2rem; left: 3rem; z-index: 500;
-            width: 42px; height: 42px;
-            border: 1px solid var(--mid); border-radius: 50%;
-            background: none; color: var(--white);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity .3s, border-color .2s;
-        }
-        #btt:hover { border-color: var(--dim); }
-        #btt.show { opacity: 1; pointer-events: all; }
+    /* ── Reveal ─────────────────────────────────────────── */
+    .rv { opacity: 0; transform: translateY(22px); transition: opacity .9s ease, transform .9s ease; }
+    .rv.on { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; } .d3 { transition-delay: .3s; }
 
-        /* ── Reveal ──────────────────────────────────────────── */
-        .rv {
-            opacity: 0; transform: translateY(28px);
-            transition: opacity .9s ease, transform .9s ease;
-        }
-        .rv.on { opacity: 1; transform: none; }
-        .rv-d1 { transition-delay: .1s; }
-        .rv-d2 { transition-delay: .2s; }
-        .rv-d3 { transition-delay: .3s; }
-        .rv-d4 { transition-delay: .4s; }
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: none; }
+    }
 
-        /* ── Keyframes ───────────────────────────────────────── */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(36px); }
-            to   { opacity: 1; transform: none; }
-        }
+    /* ── Buttons ────────────────────────────────────────── */
+    .btn {
+        display: inline-flex; align-items: center; gap: .5rem;
+        padding: .78rem 1.6rem; border-radius: 100px;
+        font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+        text-decoration: none; transition: background .25s, color .25s, border-color .25s;
+    }
+    .btn-ghost { border: 1px solid var(--mid); color: var(--fg); background: none; }
+    .btn-ghost:hover { border-color: var(--fg); }
+    .btn-solid { border: 1px solid var(--fg); background: var(--fg); color: var(--bg); }
+    .btn-solid:hover { background: transparent; color: var(--fg); }
 
-        /* ═══════════════════════════════════════════════════════
-           HERO
-        ═══════════════════════════════════════════════════════ */
-        #home {
-            min-height: 100vh;
-            display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 0 3rem 4.5rem;
-            position: relative; overflow: hidden;
-        }
+    /* ═════════════════════════════════════════════════════
+       HERO
+    ═════════════════════════════════════════════════════ */
+    #hero {
+        height: 100vh; min-height: 640px;
+        display: flex; flex-direction: column; justify-content: flex-end;
+        padding: 0 3rem 3.5rem; position: relative; overflow: hidden;
+    }
 
-        .hero-tag {
-            display: flex; align-items: center; gap: 1rem;
-            margin-bottom: 1.8rem;
-            animation: fadeUp .8s ease .15s both;
-        }
-        .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--dim); }
-        .hero-tag span { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); }
+    .eyebrow {
+        display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+        animation: fadeUp .8s ease .1s both;
+    }
+    .eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--dim); }
+    .eyebrow span { font-size: .58rem; letter-spacing: .32em; text-transform: uppercase; color: var(--dim); }
 
-        .hero-h1 {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: clamp(4.5rem, 13vw, 15rem);
-            line-height: .88; letter-spacing: -.025em; text-transform: uppercase;
-            animation: fadeUp 1s ease .3s both;
-        }
-        .hero-h1 .hollow {
-            display: block;
-            color: transparent;
-            -webkit-text-stroke: 1.5px var(--white);
-            animation: fadeUp 1s ease .45s both;
-        }
+    .hero-title {
+        font-family: 'Unbounded', sans-serif; font-weight: 900;
+        font-size: clamp(5rem, 14vw, 17rem);
+        line-height: .84; letter-spacing: -.035em; text-transform: uppercase;
+        animation: fadeUp 1s ease .25s both;
+    }
+    .hero-title .stroke {
+        display: block; color: transparent;
+        -webkit-text-stroke: 1.5px var(--fg);
+        animation: fadeUp 1s ease .42s both;
+    }
 
-        .hero-row {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            margin-top: 3rem; padding-top: 2rem;
-            border-top: 1px solid var(--mid);
-            animation: fadeUp .8s ease .7s both;
-        }
-        .hero-desc {
-            max-width: 380px; font-size: .9rem; line-height: 1.75; color: var(--dim);
-        }
-        .hero-actions { display: flex; gap: 1rem; }
+    .hero-bar {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        margin-top: 2.5rem; padding-top: 2rem;
+        border-top: 1px solid var(--border);
+        animation: fadeUp .8s ease .7s both;
+    }
+    .hero-desc {
+        max-width: 360px; font-size: .82rem; line-height: 1.82; color: var(--dim);
+    }
+    .hero-right { display: flex; align-items: flex-end; gap: 2.5rem; }
 
-        /* ── Buttons ─────────────────────────────────────────── */
-        .btn-out {
-            display: inline-flex; align-items: center; gap: .5rem;
-            padding: .85rem 1.8rem;
-            border: 1px solid var(--white); border-radius: 100px;
-            color: var(--white); text-decoration: none;
-            font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
-            background: transparent;
-            transition: background .3s, color .3s;
-        }
-        .btn-out:hover { background: var(--white); color: var(--black); }
+    .scroll-ind {
+        display: flex; flex-direction: column; align-items: center; gap: .5rem;
+        font-size: .55rem; letter-spacing: .24em; text-transform: uppercase; color: var(--dim);
+    }
+    .scroll-line {
+        width: 1px; height: 38px;
+        background: linear-gradient(to bottom, var(--dim), transparent);
+        animation: scrollAnim 2.2s ease infinite;
+    }
+    @keyframes scrollAnim {
+        0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+        40%  { opacity: 1; transform: scaleY(1); transform-origin: top; }
+        60%  { opacity: 1; transform: scaleY(1); transform-origin: bottom; }
+        100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+    }
+    .hero-btns { display: flex; gap: .8rem; }
 
-        .btn-fill {
-            display: inline-flex; align-items: center; gap: .5rem;
-            padding: .85rem 1.8rem;
-            border: 1px solid var(--white); border-radius: 100px;
-            color: var(--black); background: var(--white);
-            font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
-            transition: background .3s, color .3s;
-        }
-        .btn-fill:hover { background: transparent; color: var(--white); }
+    /* ═════════════════════════════════════════════════════
+       SECTIONS SHARED
+    ═════════════════════════════════════════════════════ */
+    .sec { padding: 7rem 3rem; }
+    .sec-lbl {
+        display: flex; align-items: center; gap: 1rem; margin-bottom: 4rem;
+    }
+    .sec-lbl::before { content: ''; width: 22px; height: 1px; background: var(--dim); }
+    .sec-lbl span { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--dim); }
 
-        /* ═══════════════════════════════════════════════════════
-           SECTION SHARED
-        ═══════════════════════════════════════════════════════ */
-        section { padding: 7rem 3rem; }
+    /* ═════════════════════════════════════════════════════
+       WORK  (services grid)
+    ═════════════════════════════════════════════════════ */
+    #work { border-top: 1px solid var(--border); }
 
-        .sec-label {
-            display: flex; align-items: center; gap: 1rem;
-            margin-bottom: 4.5rem;
-        }
-        .sec-label::before { content: ''; width: 28px; height: 1px; background: var(--dim); }
-        .sec-label span { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
+    .work-head {
+        display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem;
+    }
+    .work-title {
+        font-family: 'Unbounded', sans-serif; font-weight: 900;
+        font-size: clamp(2.8rem, 7.5vw, 9rem);
+        line-height: .84; text-transform: uppercase; letter-spacing: -.038em;
+    }
+    .work-meta { display: flex; align-items: center; gap: 2rem; }
+    .work-count { font-size: .56rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
 
-        /* ═══════════════════════════════════════════════════════
-           SERVICES
-        ═══════════════════════════════════════════════════════ */
-        #services { background: var(--black); border-top: 1px solid var(--mid); }
+    .work-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 8px;
+    }
 
-        .svc-head {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            margin-bottom: 3rem;
-        }
-        .svc-title {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: clamp(3rem, 7vw, 7rem);
-            line-height: .9; text-transform: uppercase; letter-spacing: -.025em;
-        }
+    /* Cards */
+    .wc {
+        position: relative; overflow: hidden;
+        border: 1px solid var(--border); border-radius: 10px;
+        background: #0d0d0d;
+        min-height: 480px;
+        transition: border-color .4s;
+    }
+    .wc:hover { border-color: var(--mid); }
 
-        /* Bento grid */
-        .svc-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 10px;
-        }
+    .wc-1 { grid-column: span 7; }
+    .wc-2 { grid-column: span 5; }
+    .wc-3 { grid-column: span 5; }
+    .wc-4 { grid-column: span 7; }
 
-        .svc-card {
-            position: relative; overflow: hidden;
-            border: 1px solid var(--mid); border-radius: 14px;
-            background: var(--grey);
-            min-height: 320px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            padding: 2rem;
-            transition: border-color .35s;
-        }
-        .svc-card:hover { border-color: var(--dim); }
+    .wc-img {
+        position: absolute; inset: 0;
+        background-size: cover; background-position: center;
+        opacity: .22;
+        transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform 1s cubic-bezier(.25,.46,.45,.94);
+    }
+    .wc:hover .wc-img { opacity: .45; transform: scale(1.05); }
 
-        .sc-1 { grid-column: span 7; }
-        .sc-2 { grid-column: span 5; }
-        .sc-3 { grid-column: span 5; }
-        .sc-4 { grid-column: span 7; }
+    .wc-grad {
+        position: absolute; inset: 0;
+        background: linear-gradient(to top,
+            rgba(5,5,5,1) 0%,
+            rgba(5,5,5,.7) 40%,
+            rgba(5,5,5,.15) 100%);
+    }
 
-        .card-bg {
-            position: absolute; inset: 0;
-            background-size: cover; background-position: center;
-            opacity: .15;
-            transition: opacity .6s, transform .8s;
-        }
-        .svc-card:hover .card-bg { opacity: .28; transform: scale(1.06); }
+    .wc-body {
+        position: relative; z-index: 2; height: 100%;
+        display: flex; flex-direction: column; justify-content: space-between;
+        padding: 1.8rem;
+    }
 
-        .card-num {
-            font-size: .65rem; letter-spacing: .22em; color: var(--dim);
-            position: relative; z-index: 1;
-        }
-        .card-foot { position: relative; z-index: 1; }
+    .wc-num { font-size: .55rem; letter-spacing: .28em; color: var(--dim); }
 
-        .card-ttl {
-            font-family: 'Syne', sans-serif; font-weight: 700;
-            font-size: clamp(1.4rem, 2.8vw, 2.4rem);
-            line-height: 1.05; letter-spacing: -.02em; margin-bottom: .9rem;
-        }
-        .card-txt { font-size: .82rem; color: var(--dim); line-height: 1.7; max-width: 340px; margin-bottom: 1.2rem; }
+    .wc-name {
+        font-family: 'Unbounded', sans-serif; font-weight: 700;
+        font-size: clamp(1.3rem, 2.4vw, 2.2rem);
+        line-height: .95; letter-spacing: -.02em; margin-bottom: .9rem;
+    }
+    .wc-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .wc-tag {
+        font-size: .52rem; letter-spacing: .1em; text-transform: uppercase;
+        padding: .24rem .62rem; border: 1px solid rgba(239,239,239,.12); border-radius: 100px; color: rgba(239,239,239,.4);
+        transition: border-color .3s, color .3s;
+    }
+    .wc:hover .wc-tag { border-color: rgba(239,239,239,.35); color: var(--fg); }
 
-        .card-pills { display: flex; flex-wrap: wrap; gap: .45rem; }
-        .pill {
-            font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
-            padding: .28rem .75rem; border: 1px solid var(--mid); border-radius: 100px; color: var(--dim);
-            transition: border-color .25s, color .25s;
-        }
-        .svc-card:hover .pill { border-color: var(--dim); color: var(--white); }
+    .wc-reveal {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        margin-top: 1.2rem; padding-top: 1rem;
+        border-top: 1px solid rgba(239,239,239,.08);
+        opacity: 0; transform: translateY(10px);
+        transition: opacity .38s ease, transform .38s ease;
+    }
+    .wc:hover .wc-reveal { opacity: 1; transform: none; }
 
-        .card-cta {
-            display: inline-flex; align-items: center; gap: .45rem;
-            font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
-            color: var(--white); text-decoration: none; margin-top: 1.1rem;
-            opacity: 0; transform: translateX(-8px);
-            transition: opacity .3s, transform .3s;
-        }
-        .svc-card:hover .card-cta { opacity: 1; transform: none; }
-        .card-cta svg { transition: transform .25s; }
-        .card-cta:hover svg { transform: translateX(4px); }
+    .wc-desc { font-size: .73rem; color: var(--dim); line-height: 1.65; max-width: 65%; }
+    .wc-cta {
+        display: inline-flex; align-items: center; gap: .4rem;
+        font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+        color: var(--fg); text-decoration: none; white-space: nowrap;
+    }
+    .wc-cta svg { transition: transform .25s; }
+    .wc-cta:hover svg { transform: translateX(4px); }
 
-        /* ═══════════════════════════════════════════════════════
-           ABOUT
-        ═══════════════════════════════════════════════════════ */
-        #about { border-top: 1px solid var(--mid); }
+    /* ═════════════════════════════════════════════════════
+       ABOUT
+    ═════════════════════════════════════════════════════ */
+    #about { border-top: 1px solid var(--border); }
 
-        .about-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 7rem; align-items: start;
-        }
-        .about-h {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: clamp(3.5rem, 7.5vw, 9rem);
-            line-height: .88; text-transform: uppercase; letter-spacing: -.03em;
-        }
-        .about-body { padding-top: .5rem; }
-        .about-p {
-            font-size: .95rem; line-height: 1.85; color: var(--dim); margin-bottom: 2rem;
-        }
-        .about-p strong { color: var(--white); font-weight: 400; }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start; }
 
-        .stats {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 2rem; margin-bottom: 3rem;
-            padding-top: 2rem; border-top: 1px solid var(--mid);
-        }
-        .stat-v {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: 3.2rem; line-height: 1; margin-bottom: .25rem;
-        }
-        .stat-l { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+    .about-h {
+        font-family: 'Unbounded', sans-serif; font-weight: 900;
+        font-size: clamp(2.8rem, 6.5vw, 8rem);
+        line-height: .86; text-transform: uppercase; letter-spacing: -.038em;
+    }
 
-        .about-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .about-txt { font-size: .88rem; line-height: 1.88; color: var(--dim); margin-bottom: 1.8rem; }
+    .about-txt strong { color: var(--fg); font-weight: 400; }
 
-        /* ═══════════════════════════════════════════════════════
-           CONTACT
-        ═══════════════════════════════════════════════════════ */
-        #contact { border-top: 1px solid var(--mid); }
+    .stats {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem;
+        padding: 2rem 0; border-top: 1px solid var(--border); margin-bottom: 2.5rem;
+    }
+    .sv { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 2.8rem; line-height: 1; margin-bottom: .2rem; }
+    .sl { font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+    .about-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-        .ct-h {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: clamp(3.5rem, 9vw, 11rem);
-            line-height: .88; text-transform: uppercase; letter-spacing: -.03em;
-            margin-bottom: 5rem;
-        }
-        .ct-h .hollow {
-            color: transparent; -webkit-text-stroke: 1.5px var(--white);
-        }
+    /* ═════════════════════════════════════════════════════
+       CONTACT
+    ═════════════════════════════════════════════════════ */
+    #contact { border-top: 1px solid var(--border); }
 
-        .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start; }
+    .ct-h {
+        font-family: 'Unbounded', sans-serif; font-weight: 900;
+        font-size: clamp(3rem, 9.5vw, 12rem);
+        line-height: .84; text-transform: uppercase; letter-spacing: -.038em;
+        margin-bottom: 5rem;
+    }
+    .ct-h .stroke { color: transparent; -webkit-text-stroke: 1.5px var(--fg); }
 
-        .ct-rows {}
-        .ct-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1.4rem 0; border-bottom: 1px solid var(--mid);
-        }
-        .ct-row:first-child { border-top: 1px solid var(--mid); }
-        .ct-lbl { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
-        .ct-val { font-size: .88rem; }
+    .ct-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start; }
 
-        .ct-social { display: flex; gap: 1.5rem; margin-top: 2.5rem; }
-        .ct-social a {
-            font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-            color: var(--dim); text-decoration: none; transition: color .2s;
-        }
-        .ct-social a:hover { color: var(--white); }
+    .ct-row {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 1.3rem 0; border-bottom: 1px solid var(--border);
+    }
+    .ct-row:first-child { border-top: 1px solid var(--border); }
+    .ct-lbl { font-size: .55rem; letter-spacing: .25em; text-transform: uppercase; color: var(--dim); }
+    .ct-val { font-size: .84rem; }
 
-        /* Form */
-        .ct-form { display: flex; flex-direction: column; }
-        .f-row { display: flex; gap: 0; }
-        .f-row .f-field { flex: 1; }
-        .f-row .f-field + .f-field { border-left: none; }
+    .ct-soc { display: flex; gap: 1.4rem; margin-top: 2.2rem; }
+    .ct-soc a {
+        font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+        color: var(--dim); text-decoration: none; transition: color .2s;
+    }
+    .ct-soc a:hover { color: var(--fg); }
 
-        .f-field {
-            padding: 1.3rem 0; border-bottom: 1px solid var(--mid);
-            transition: border-color .3s;
-        }
-        .f-field:focus-within { border-color: var(--white); }
-        .f-field + .f-field { margin-top: 0; }
+    /* Form */
+    .f-pair { display: flex; gap: 2rem; }
+    .f-pair .ff { flex: 1; }
+    .ff { padding: 1.25rem 0; border-bottom: 1px solid var(--border); transition: border-color .3s; }
+    .ff:focus-within { border-color: var(--fg); }
+    .ff label { display: block; font-size: .52rem; letter-spacing: .24em; text-transform: uppercase; color: var(--dim); margin-bottom: .45rem; }
+    .ff input, .ff select, .ff textarea {
+        width: 100%; background: none; border: none; outline: none;
+        font-family: 'Inter', sans-serif; font-size: .9rem; font-weight: 300; color: var(--fg);
+    }
+    .ff select option { background: var(--bg); }
+    .ff textarea { resize: none; min-height: 105px; }
+    .f-sub { margin-top: 2.5rem; }
 
-        .f-field label {
-            display: block; font-size: .6rem; letter-spacing: .2em;
-            text-transform: uppercase; color: var(--dim); margin-bottom: .5rem;
-        }
-        .f-field input, .f-field select, .f-field textarea {
-            width: 100%; background: transparent; border: none; outline: none;
-            color: var(--white); font-family: 'Inter', sans-serif;
-            font-size: .95rem; font-weight: 300;
-        }
-        .f-field select option { background: var(--black); }
-        .f-field textarea { resize: none; min-height: 110px; }
-        .f-submit { margin-top: 2.5rem; }
+    /* ═════════════════════════════════════════════════════
+       FOOTER
+    ═════════════════════════════════════════════════════ */
+    footer {
+        border-top: 1px solid var(--border); padding: 1.8rem 3rem;
+        display: flex; align-items: center; justify-content: space-between;
+    }
+    .ft-logo { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: .6rem; letter-spacing: .28em; text-transform: uppercase; }
+    .ft-copy { font-size: .58rem; color: var(--dim); }
 
-        /* ═══════════════════════════════════════════════════════
-           FOOTER
-        ═══════════════════════════════════════════════════════ */
-        footer {
-            border-top: 1px solid var(--mid);
-            padding: 2rem 3rem;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .ft-logo {
-            font-family: 'Syne', sans-serif; font-weight: 800;
-            font-size: .8rem; letter-spacing: .2em; text-transform: uppercase;
-        }
-        .ft-copy { font-size: .7rem; color: var(--dim); }
+    /* ═════════════════════════════════════════════════════
+       MODALS
+    ═════════════════════════════════════════════════════ */
+    .overlay {
+        position: fixed; inset: 0; z-index: 5000;
+        background: rgba(5,5,5,.97); backdrop-filter: blur(16px);
+        display: flex; align-items: center; justify-content: center; padding: 2rem;
+        opacity: 0; pointer-events: none; transition: opacity .4s;
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+        background: #0f0f0f; border: 1px solid var(--border); border-radius: 14px;
+        padding: 2.5rem; max-width: 840px; width: 100%; max-height: 88vh; overflow-y: auto;
+        transform: translateY(14px); transition: transform .4s;
+    }
+    .overlay.open .modal { transform: none; }
+    .m-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.2rem; }
+    .m-tt { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: -.02em; }
+    .m-x {
+        width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 50%;
+        background: none; color: var(--fg); display: flex; align-items: center; justify-content: center;
+        transition: background .2s;
+    }
+    .m-x:hover { background: var(--border); }
+    .m-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .7rem; }
+    .m-card { border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; transition: border-color .25s; }
+    .m-card:hover { border-color: var(--mid); }
+    .m-card h3 { font-family: 'Unbounded', sans-serif; font-size: .78rem; font-weight: 700; margin-bottom: .9rem; }
+    .m-card ul { list-style: none; margin-bottom: 1.3rem; }
+    .m-card li { font-size: .7rem; color: var(--dim); padding: .35rem 0; border-bottom: 1px solid var(--border); }
+    .m-card li:last-child { border-bottom: none; }
+    .m-card button {
+        width: 100%; padding: .6rem; border: 1px solid var(--mid); border-radius: 100px;
+        background: none; color: var(--fg); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+        transition: background .2s, color .2s, border-color .2s;
+    }
+    .m-card button:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 
-        /* ═══════════════════════════════════════════════════════
-           MODALS
-        ═══════════════════════════════════════════════════════ */
-        .m-overlay {
-            position: fixed; inset: 0;
-            background: rgba(8,8,8,.96); backdrop-filter: blur(12px);
-            z-index: 5000;
-            display: flex; align-items: center; justify-content: center; padding: 2rem;
-            opacity: 0; pointer-events: none; transition: opacity .4s;
-        }
-        .m-overlay.open { opacity: 1; pointer-events: all; }
+    .cf { margin-bottom: 1.3rem; }
+    .cf label { display: block; font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-bottom: .5rem; }
+    .cf select, .cf input {
+        width: 100%; padding: .75rem 1rem;
+        background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px;
+        color: var(--fg); font-family: 'Inter', sans-serif; font-size: .85rem; outline: none;
+        transition: border-color .2s;
+    }
+    .cf select:focus, .cf input:focus { border-color: var(--mid); }
+    .cf select option { background: var(--bg); }
+    .calc-res { background: #0a0a0a; border: 1px solid var(--border); border-radius: 10px; padding: 1.8rem; text-align: center; margin: 1.3rem 0; }
+    .calc-res p { font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); margin-bottom: .3rem; }
+    .calc-amt { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 2.8rem; }
 
-        .m-box {
-            background: var(--grey); border: 1px solid var(--mid); border-radius: 16px;
-            padding: 3rem; max-width: 840px; width: 100%;
-            max-height: 88vh; overflow-y: auto;
-            transform: translateY(18px); transition: transform .4s;
-        }
-        .m-overlay.open .m-box { transform: none; }
+    /* Notifs */
+    #notifs { position: fixed; top: 5rem; right: 2rem; z-index: 9000; display: flex; flex-direction: column; gap: .4rem; }
+    .notif {
+        background: #0f0f0f; border: 1px solid var(--border); border-radius: 8px;
+        padding: .9rem 1.3rem; max-width: 320px;
+        transform: translateX(110%); transition: transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .notif.in { transform: none; }
+    .notif h4 { font-family: 'Unbounded', sans-serif; font-size: .72rem; font-weight: 700; margin-bottom: .2rem; }
+    .notif p  { font-size: .7rem; color: var(--dim); line-height: 1.5; }
 
-        .m-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem; }
-        .m-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -.02em; }
-        .m-close {
-            width: 34px; height: 34px; border: 1px solid var(--mid); border-radius: 50%;
-            background: none; color: var(--white);
-            display: flex; align-items: center; justify-content: center;
-            transition: background .2s;
-        }
-        .m-close:hover { background: var(--mid); }
-
-        .m-svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
-        .m-svc {
-            border: 1px solid var(--mid); border-radius: 12px; padding: 1.5rem;
-            transition: border-color .25s;
-        }
-        .m-svc:hover { border-color: var(--dim); }
-        .m-svc h3 { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; margin-bottom: 1rem; }
-        .m-svc ul { list-style: none; margin-bottom: 1.5rem; }
-        .m-svc ul li {
-            font-size: .78rem; color: var(--dim); padding: .4rem 0;
-            border-bottom: 1px solid var(--mid);
-        }
-        .m-svc ul li:last-child { border-bottom: none; }
-        .m-svc button {
-            width: 100%; padding: .65rem; border: 1px solid var(--dim); border-radius: 100px;
-            background: none; color: var(--white);
-            font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
-            transition: background .2s, color .2s, border-color .2s;
-        }
-        .m-svc button:hover { background: var(--white); color: var(--black); border-color: var(--white); }
-
-        /* Calc */
-        .c-field { margin-bottom: 1.5rem; }
-        .c-field label { display: block; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .55rem; }
-        .c-field select, .c-field input {
-            width: 100%; padding: .8rem 1rem;
-            background: var(--black); border: 1px solid var(--mid); border-radius: 8px;
-            color: var(--white); font-family: 'Inter', sans-serif; font-size: .9rem; outline: none;
-            transition: border-color .2s;
-        }
-        .c-field select:focus, .c-field input:focus { border-color: var(--dim); }
-        .c-field select option { background: var(--black); }
-
-        .c-result {
-            background: var(--black); border: 1px solid var(--mid); border-radius: 12px;
-            padding: 2rem; text-align: center; margin: 1.5rem 0;
-        }
-        .c-result p { font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); margin-bottom: .4rem; }
-        .c-result .amt { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 3rem; }
-
-        /* ── Notifications ───────────────────────────────────── */
-        #notifs {
-            position: fixed; top: 5rem; right: 2rem; z-index: 9000;
-            display: flex; flex-direction: column; gap: .5rem;
-        }
-        .notif {
-            background: var(--grey); border: 1px solid var(--mid); border-radius: 10px;
-            padding: 1rem 1.4rem; max-width: 340px;
-            transform: translateX(110%); transition: transform .4s cubic-bezier(.16,1,.3,1);
-        }
-        .notif.in { transform: none; }
-        .notif h4 { font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 700; margin-bottom: .25rem; }
-        .notif p { font-size: .78rem; color: var(--dim); line-height: 1.5; }
-
-        /* ── Responsive ──────────────────────────────────────── */
-        @media (max-width: 900px) {
-            nav { padding: 1.5rem; }
-            .nav-links { display: none; }
-
-            #home { padding: 0 1.5rem 3.5rem; }
-            .hero-h1 { font-size: clamp(4rem, 18vw, 8rem); }
-            .hero-row { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-
-            section { padding: 5rem 1.5rem; }
-            .svc-head { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-            .svc-grid { grid-template-columns: 1fr; }
-            .sc-1,.sc-2,.sc-3,.sc-4 { grid-column: span 1; }
-
-            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .ct-grid { grid-template-columns: 1fr; gap: 3rem; }
-            .m-svc-grid { grid-template-columns: 1fr; }
-
-            footer { padding: 1.5rem; flex-direction: column; gap: .6rem; text-align: center; }
-            #btt { left: 1.5rem; bottom: 1.5rem; }
-        }
+    /* ═════════════════════════════════════════════════════
+       RESPONSIVE
+    ═════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+        nav { padding: 1.5rem; }
+        .nav-links { display: none; }
+        #hero { padding: 0 1.5rem 3rem; }
+        .hero-bar { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+        .hero-right { flex-direction: row; }
+        .sec { padding: 5rem 1.5rem; }
+        .work-head { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+        .work-grid { grid-template-columns: 1fr; }
+        .wc-1,.wc-2,.wc-3,.wc-4 { grid-column: span 1; }
+        .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+        .ct-grid    { grid-template-columns: 1fr; gap: 3rem; }
+        .m-grid     { grid-template-columns: 1fr; }
+        .f-pair     { flex-direction: column; gap: 0; }
+        footer { flex-direction: column; gap: .6rem; text-align: center; padding: 1.5rem; }
+        #btt { left: 1.5rem; bottom: 1.5rem; }
+    }
     </style>
 </head>
 <body>
 
-<!-- Grain -->
 <div id="grain"></div>
-
-<!-- Custom cursor -->
-<div id="c-dot"></div>
-<div id="c-ring"></div>
+<div id="dot"></div>
+<div id="ring"></div>
 
 <!-- Nav -->
 <nav>
-    <a href="#home" class="nav-logo">Haztech Digital</a>
+    <a href="#hero" class="logo">Haztech Digital</a>
     <ul class="nav-links">
-        <li><a href="#services">Services</a></li>
+        <li><a href="#work">Services</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#" class="nav-cta" onclick="openServices();return false;">Get Started</a></li>
     </ul>
 </nav>
 
 <!-- Back to top -->
-<button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M6.5 11V2M2 6.5l4.5-4.5 4.5 4.5"/>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 12 12">
+        <path d="M6 10V2M2 6l4-4 4 4"/>
     </svg>
 </button>
 
 <!-- ══════════════════════════════════════════════════════
      HERO
 ══════════════════════════════════════════════════════ -->
-<section id="home">
-    <div class="hero-tag">
-        <span>Malaysia's Technology Partner</span>
-    </div>
-    <h1 class="hero-h1">
+<section id="hero">
+    <div class="eyebrow"><span>Technology Solutions · Malaysia</span></div>
+    <h1 class="hero-title">
         Haztech
-        <span class="hollow">Digital</span>
+        <span class="stroke">Digital</span>
     </h1>
-    <div class="hero-row">
+    <div class="hero-bar">
         <p class="hero-desc">
-            Bridging the gap between technology and innovation. Expert solutions in computer networking, repairs, web development, and cybersecurity.
+            Bridging the gap between technology and innovation. Expert solutions in networking, repairs, web development, and cybersecurity.
         </p>
-        <div class="hero-actions">
-            <a href="#services" class="btn-out">View Services</a>
-            <button class="btn-fill" onclick="openCalc()">Get Quote</button>
+        <div class="hero-right">
+            <div class="scroll-ind">
+                <div class="scroll-line"></div>
+                Scroll
+            </div>
+            <div class="hero-btns">
+                <a href="#work" class="btn btn-ghost">Services</a>
+                <button class="btn btn-solid" onclick="openCalc()">Get Quote</button>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- ══════════════════════════════════════════════════════
-     SERVICES
+     WORK
 ══════════════════════════════════════════════════════ -->
-<section id="services">
-    <div class="sec-label rv"><span>What We Do</span></div>
-    <div class="svc-head rv rv-d1">
-        <h2 class="svc-title">Our<br>Services</h2>
-        <button class="btn-out" onclick="openServices()">View All</button>
+<section id="work" class="sec">
+    <div class="sec-lbl rv"><span>What We Do</span></div>
+    <div class="work-head rv d1">
+        <h2 class="work-title">Services</h2>
+        <div class="work-meta">
+            <span class="work-count">04 Services</span>
+            <button class="btn btn-ghost" onclick="openSvc()">View All</button>
+        </div>
     </div>
 
-    <div class="svc-grid">
+    <div class="work-grid">
 
-        <div class="svc-card sc-1 rv rv-d1" onclick="showDetail('networking')">
-            <div class="card-bg" style="background-image:url('assets/comp1.jpg')"></div>
-            <span class="card-num">01</span>
-            <div class="card-foot">
-                <h3 class="card-ttl">Computer &amp;<br>Networking</h3>
-                <p class="card-txt">Reliable repair and maintenance for PCs, laptops, and networks. Expert solutions for all your computing needs.</p>
-                <div class="card-pills">
-                    <span class="pill">PC Repair</span>
-                    <span class="pill">Network Setup</span>
-                    <span class="pill">Data Recovery</span>
+        <div class="wc wc-1 rv d1" onclick="showDetail('networking')">
+            <div class="wc-img" style="background-image:url('assets/comp1.jpg')"></div>
+            <div class="wc-grad"></div>
+            <div class="wc-body">
+                <span class="wc-num">001</span>
+                <div>
+                    <h3 class="wc-name">Computer &amp;<br>Networking</h3>
+                    <div class="wc-tags">
+                        <span class="wc-tag">PC Repair</span>
+                        <span class="wc-tag">Network Setup</span>
+                        <span class="wc-tag">Data Recovery</span>
+                    </div>
+                    <div class="wc-reveal">
+                        <p class="wc-desc">Reliable repair and maintenance for PCs, laptops, and enterprise networks.</p>
+                        <a href="#" class="wc-cta" onclick="event.preventDefault();getQuote('networking')">
+                            Get Quote
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 13 13"><path d="M2 6.5h9M8 3l3.5 3.5L8 10"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('networking')">
-                    Get Quote
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
-                </a>
             </div>
         </div>
 
-        <div class="svc-card sc-2 rv rv-d2" onclick="showDetail('repairs')">
-            <div class="card-bg" style="background-image:url('assets/comp2.jpg')"></div>
-            <span class="card-num">02</span>
-            <div class="card-foot">
-                <h3 class="card-ttl">Phone<br>Repairs</h3>
-                <p class="card-txt">Expert repair services to bring your mobile devices back to life with quick turnaround times.</p>
-                <div class="card-pills">
-                    <span class="pill">Screen</span>
-                    <span class="pill">Battery</span>
-                    <span class="pill">Water Damage</span>
+        <div class="wc wc-2 rv d2" onclick="showDetail('repairs')">
+            <div class="wc-img" style="background-image:url('assets/comp2.jpg')"></div>
+            <div class="wc-grad"></div>
+            <div class="wc-body">
+                <span class="wc-num">002</span>
+                <div>
+                    <h3 class="wc-name">Phone<br>Repairs</h3>
+                    <div class="wc-tags">
+                        <span class="wc-tag">Screen</span>
+                        <span class="wc-tag">Battery</span>
+                        <span class="wc-tag">Water Damage</span>
+                    </div>
+                    <div class="wc-reveal">
+                        <p class="wc-desc">Expert repair with fast turnaround on all mobile devices.</p>
+                        <a href="#" class="wc-cta" onclick="event.preventDefault();getQuote('repairs')">
+                            Get Quote
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 13 13"><path d="M2 6.5h9M8 3l3.5 3.5L8 10"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('repairs')">
-                    Get Quote
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
-                </a>
             </div>
         </div>
 
-        <div class="svc-card sc-3 rv rv-d3" onclick="showDetail('security')">
-            <div class="card-bg" style="background-image:url('assets/about.jpeg')"></div>
-            <span class="card-num">03</span>
-            <div class="card-foot">
-                <h3 class="card-ttl">Cyber-<br>security</h3>
-                <p class="card-txt">Protect your digital assets with advanced cybersecurity solutions and expert guidance.</p>
-                <div class="card-pills">
-                    <span class="pill">Audits</span>
-                    <span class="pill">Virus Removal</span>
-                    <span class="pill">Data Protection</span>
+        <div class="wc wc-3 rv d2" onclick="showDetail('security')">
+            <div class="wc-img" style="background-image:url('assets/about.jpeg')"></div>
+            <div class="wc-grad"></div>
+            <div class="wc-body">
+                <span class="wc-num">003</span>
+                <div>
+                    <h3 class="wc-name">Cyber-<br>security</h3>
+                    <div class="wc-tags">
+                        <span class="wc-tag">Audits</span>
+                        <span class="wc-tag">Virus Removal</span>
+                        <span class="wc-tag">Protection</span>
+                    </div>
+                    <div class="wc-reveal">
+                        <p class="wc-desc">Advanced protection and expert guidance for your digital assets.</p>
+                        <a href="#" class="wc-cta" onclick="event.preventDefault();getQuote('security')">
+                            Get Quote
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 13 13"><path d="M2 6.5h9M8 3l3.5 3.5L8 10"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('security')">
-                    Get Quote
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
-                </a>
             </div>
         </div>
 
-        <div class="svc-card sc-4 rv rv-d4" onclick="showDetail('webdev')">
-            <div class="card-bg" style="background-image:url('assets/tools.jpg')"></div>
-            <span class="card-num">04</span>
-            <div class="card-foot">
-                <h3 class="card-ttl">Web<br>Development</h3>
-                <p class="card-txt">Custom digital experiences built with modern technologies. From concept to deployment.</p>
-                <div class="card-pills">
-                    <span class="pill">Design</span>
-                    <span class="pill">Development</span>
-                    <span class="pill">SEO</span>
+        <div class="wc wc-4 rv d3" onclick="showDetail('webdev')">
+            <div class="wc-img" style="background-image:url('assets/tools.jpg')"></div>
+            <div class="wc-grad"></div>
+            <div class="wc-body">
+                <span class="wc-num">004</span>
+                <div>
+                    <h3 class="wc-name">Web<br>Development</h3>
+                    <div class="wc-tags">
+                        <span class="wc-tag">Design</span>
+                        <span class="wc-tag">Development</span>
+                        <span class="wc-tag">SEO</span>
+                    </div>
+                    <div class="wc-reveal">
+                        <p class="wc-desc">Custom digital experiences built from concept to deployment.</p>
+                        <a href="#" class="wc-cta" onclick="event.preventDefault();getQuote('webdev')">
+                            Get Quote
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 13 13"><path d="M2 6.5h9M8 3l3.5 3.5L8 10"/></svg>
+                        </a>
+                    </div>
                 </div>
-                <a href="#" class="card-cta" onclick="event.preventDefault();getQuote('webdev')">
-                    Get Quote
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 7.5h10M9 4l3.5 3.5L9 11"/></svg>
-                </a>
             </div>
         </div>
 
@@ -636,40 +600,24 @@
 <!-- ══════════════════════════════════════════════════════
      ABOUT
 ══════════════════════════════════════════════════════ -->
-<section id="about">
-    <div class="sec-label rv"><span>About</span></div>
+<section id="about" class="sec">
+    <div class="sec-lbl rv"><span>About</span></div>
     <div class="about-grid">
-        <div class="rv rv-d1">
-            <h2 class="about-h">Your Digital Partner</h2>
+        <div class="rv d1">
+            <h2 class="about-h">Your Digital<br>Partner</h2>
         </div>
-        <div class="about-body rv rv-d2">
-            <p class="about-p">
-                Led by CEO <strong>Mohd Hazami Hasnah</strong>, HazTech Digital is at the forefront of providing innovative solutions in repairs, multimedia, cybersecurity, web development, and software.
-            </p>
-            <p class="about-p">
-                With years of experience in the technology industry, we've helped <strong>countless businesses and individuals</strong> achieve their digital goals. Our commitment to excellence sets us apart.
-            </p>
+        <div class="rv d2">
+            <p class="about-txt">Led by CEO <strong>Mohd Hazami Hasnah</strong>, HazTech Digital delivers innovative solutions in repairs, cybersecurity, web development, and multimedia services.</p>
+            <p class="about-txt">With years of experience, we've helped <strong>countless businesses and individuals</strong> achieve their digital goals through excellence and dedication.</p>
             <div class="stats">
-                <div>
-                    <div class="stat-v">500+</div>
-                    <div class="stat-l">Projects Completed</div>
-                </div>
-                <div>
-                    <div class="stat-v">98%</div>
-                    <div class="stat-l">Client Satisfaction</div>
-                </div>
-                <div>
-                    <div class="stat-v">24/7</div>
-                    <div class="stat-l">Support Available</div>
-                </div>
-                <div>
-                    <div class="stat-v">10+</div>
-                    <div class="stat-l">Years Experience</div>
-                </div>
+                <div><div class="sv">500+</div><div class="sl">Projects</div></div>
+                <div><div class="sv">98%</div><div class="sl">Satisfaction</div></div>
+                <div><div class="sv">24/7</div><div class="sl">Support</div></div>
+                <div><div class="sv">10+</div><div class="sl">Years</div></div>
             </div>
             <div class="about-btns">
-                <a href="#contact" class="btn-out">Contact Us</a>
-                <button class="btn-out" onclick="loadTeam()">Meet The Team</button>
+                <a href="#contact" class="btn btn-ghost">Contact Us</a>
+                <button class="btn btn-ghost" onclick="loadTeam()">Our Team</button>
             </div>
         </div>
     </div>
@@ -678,54 +626,33 @@
 <!-- ══════════════════════════════════════════════════════
      CONTACT
 ══════════════════════════════════════════════════════ -->
-<section id="contact">
-    <div class="sec-label rv"><span>Contact</span></div>
-    <h2 class="ct-h rv rv-d1">
-        Get In<br><span class="hollow">Touch</span>
-    </h2>
+<section id="contact" class="sec">
+    <div class="sec-lbl rv"><span>Contact</span></div>
+    <h2 class="ct-h rv d1">Get In<br><span class="stroke">Touch</span></h2>
     <div class="ct-grid">
-        <div class="rv rv-d2">
-            <div class="ct-rows">
-                <div class="ct-row">
-                    <span class="ct-lbl">Phone</span>
-                    <span class="ct-val">+60-XXX-XXXX</span>
-                </div>
-                <div class="ct-row">
-                    <span class="ct-lbl">Email</span>
-                    <span class="ct-val">info@haztechdigital.com</span>
-                </div>
-                <div class="ct-row">
-                    <span class="ct-lbl">Location</span>
-                    <span class="ct-val">Malaysia</span>
-                </div>
-                <div class="ct-row">
-                    <span class="ct-lbl">Hours</span>
-                    <span class="ct-val">Mon–Sat, 9am–6pm</span>
-                </div>
+        <div class="rv d2">
+            <div>
+                <div class="ct-row"><span class="ct-lbl">Phone</span><span class="ct-val">+60-XXX-XXXX</span></div>
+                <div class="ct-row"><span class="ct-lbl">Email</span><span class="ct-val">info@haztechdigital.com</span></div>
+                <div class="ct-row"><span class="ct-lbl">Location</span><span class="ct-val">Malaysia</span></div>
+                <div class="ct-row"><span class="ct-lbl">Hours</span><span class="ct-val">Mon–Sat, 9am–6pm</span></div>
             </div>
-            <div class="ct-social">
+            <div class="ct-soc">
                 <a href="#">Facebook</a>
                 <a href="#">Twitter</a>
                 <a href="#">Instagram</a>
                 <a href="#">LinkedIn</a>
             </div>
         </div>
-
-        <div class="rv rv-d3">
-            <form id="contactForm" class="ct-form">
-                <div class="f-row">
-                    <div class="f-field" style="margin-right:2rem">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" placeholder="Your name" required>
-                    </div>
-                    <div class="f-field">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                    </div>
+        <div class="rv d3">
+            <form id="ctForm">
+                <div class="f-pair">
+                    <div class="ff"><label for="fname">Name</label><input type="text" id="fname" name="name" placeholder="Your name" required></div>
+                    <div class="ff"><label for="femail">Email</label><input type="email" id="femail" name="email" placeholder="your@email.com" required></div>
                 </div>
-                <div class="f-field">
-                    <label for="service">Service Required</label>
-                    <select id="service" name="service" required>
+                <div class="ff">
+                    <label for="fservice">Service</label>
+                    <select id="fservice" name="service" required>
                         <option value="">Select a service</option>
                         <option value="networking">Computer &amp; Networking</option>
                         <option value="repairs">Phone Repairs</option>
@@ -735,265 +662,125 @@
                         <option value="other">Other</option>
                     </select>
                 </div>
-                <div class="f-field">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea>
-                </div>
-                <div class="f-submit">
-                    <button type="submit" class="btn-fill">Send Message</button>
-                </div>
+                <div class="ff"><label for="fmsg">Message</label><textarea id="fmsg" name="message" placeholder="Tell us about your project..." required></textarea></div>
+                <div class="f-sub"><button type="submit" class="btn btn-solid">Send Message</button></div>
             </form>
         </div>
     </div>
 </section>
 
-<!-- Footer -->
 <footer>
     <span class="ft-logo">Haztech Digital</span>
     <span class="ft-copy">&copy; 2025 HazTech Digital Enterprise. All Rights Reserved.</span>
 </footer>
 
-<!-- ══════════════════════════════════════════════════════
-     SERVICES MODAL
-══════════════════════════════════════════════════════ -->
-<div id="svcModal" class="m-overlay">
-    <div class="m-box">
-        <div class="m-head">
-            <h2 class="m-title">Our Services</h2>
-            <button class="m-close" onclick="closeServices()">
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l9 9M10 1L1 10"/></svg>
-            </button>
+<!-- Services Modal -->
+<div id="svcOverlay" class="overlay">
+    <div class="modal">
+        <div class="m-hd">
+            <h2 class="m-tt">Services</h2>
+            <button class="m-x" onclick="closeSvc()"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 10 10"><path d="M1 1l8 8M9 1L1 9"/></svg></button>
         </div>
-        <div class="m-svc-grid">
-            <div class="m-svc">
-                <h3>Computer &amp; Networking</h3>
-                <ul>
-                    <li>PC/Laptop Repair</li>
-                    <li>Network Setup</li>
-                    <li>Data Recovery</li>
-                    <li>System Maintenance</li>
-                </ul>
-                <button onclick="getQuote('networking')">Get Quote</button>
-            </div>
-            <div class="m-svc">
-                <h3>Phone Repairs</h3>
-                <ul>
-                    <li>Screen Replacement</li>
-                    <li>Battery Replacement</li>
-                    <li>Water Damage Repair</li>
-                    <li>Software Issues</li>
-                </ul>
-                <button onclick="getQuote('repairs')">Get Quote</button>
-            </div>
-            <div class="m-svc">
-                <h3>Cybersecurity</h3>
-                <ul>
-                    <li>Security Audits</li>
-                    <li>Virus Removal</li>
-                    <li>Data Protection</li>
-                    <li>Security Training</li>
-                </ul>
-                <button onclick="getQuote('security')">Get Quote</button>
-            </div>
+        <div class="m-grid">
+            <div class="m-card"><h3>Computer &amp; Networking</h3><ul><li>PC/Laptop Repair</li><li>Network Setup</li><li>Data Recovery</li><li>System Maintenance</li></ul><button onclick="getQuote('networking')">Get Quote</button></div>
+            <div class="m-card"><h3>Phone Repairs</h3><ul><li>Screen Replacement</li><li>Battery Replacement</li><li>Water Damage Repair</li><li>Software Issues</li></ul><button onclick="getQuote('repairs')">Get Quote</button></div>
+            <div class="m-card"><h3>Cybersecurity</h3><ul><li>Security Audits</li><li>Virus Removal</li><li>Data Protection</li><li>Security Training</li></ul><button onclick="getQuote('security')">Get Quote</button></div>
         </div>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     CALCULATOR MODAL
-══════════════════════════════════════════════════════ -->
-<div id="calcModal" class="m-overlay">
-    <div class="m-box" style="max-width:500px">
-        <div class="m-head">
-            <h2 class="m-title">Service Calculator</h2>
-            <button class="m-close" onclick="closeCalc()">
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l9 9M10 1L1 10"/></svg>
-            </button>
+<!-- Calculator Modal -->
+<div id="calcOverlay" class="overlay">
+    <div class="modal" style="max-width:480px">
+        <div class="m-hd">
+            <h2 class="m-tt">Calculator</h2>
+            <button class="m-x" onclick="closeCalc()"><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 10 10"><path d="M1 1l8 8M9 1L1 9"/></svg></button>
         </div>
-        <div class="c-field">
-            <label>Service Type</label>
-            <select id="calcSvc" onchange="calcPrice()">
-                <option value="">Select Service</option>
-                <option value="networking">Computer &amp; Networking</option>
-                <option value="repairs">Phone Repairs</option>
-                <option value="security">Cybersecurity</option>
-                <option value="webdev">Web Development</option>
-            </select>
-        </div>
-        <div class="c-field">
-            <label>Device Count</label>
-            <input type="number" id="devCount" min="1" value="1" onchange="calcPrice()">
-        </div>
-        <div class="c-field">
-            <label>Priority Level</label>
-            <select id="priority" onchange="calcPrice()">
-                <option value="normal">Normal (3–5 days)</option>
-                <option value="urgent">Urgent (1–2 days) +50%</option>
-                <option value="emergency">Emergency (Same day) +100%</option>
-            </select>
-        </div>
-        <div class="c-result">
-            <p>Estimated Cost</p>
-            <span class="amt" id="estCost">$0</span>
-        </div>
-        <button class="btn-fill" style="width:100%" onclick="bookService()">Book Service</button>
+        <div class="cf"><label>Service Type</label><select id="cSvc" onchange="calcP()"><option value="">Select</option><option value="networking">Computer &amp; Networking</option><option value="repairs">Phone Repairs</option><option value="security">Cybersecurity</option><option value="webdev">Web Development</option></select></div>
+        <div class="cf"><label>Device Count</label><input type="number" id="cCnt" min="1" value="1" onchange="calcP()"></div>
+        <div class="cf"><label>Priority</label><select id="cPri" onchange="calcP()"><option value="normal">Normal (3–5 days)</option><option value="urgent">Urgent (1–2 days) +50%</option><option value="emergency">Emergency (Same day) +100%</option></select></div>
+        <div class="calc-res"><p>Estimated Cost</p><span class="calc-amt" id="estCost">$0</span></div>
+        <button class="btn btn-solid" style="width:100%" onclick="bookSvc()">Book Service</button>
     </div>
 </div>
 
-<!-- Notifications -->
 <div id="notifs"></div>
 
-<!-- ══════════════════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════════════════ -->
 <script>
-// ── Cursor ──────────────────────────────────────────────
-const dot  = document.getElementById('c-dot');
-const ring = document.getElementById('c-ring');
-let mx=0, my=0, rx=0, ry=0;
-
-document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.left = mx + 'px';
-    dot.style.top  = my + 'px';
+/* Cursor */
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function tick(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+document.querySelectorAll('a,button,[onclick]').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{dot.style.width='40px';dot.style.height='40px';dot.style.opacity='.18';});
+    el.addEventListener('mouseleave',()=>{dot.style.width='6px';dot.style.height='6px';dot.style.opacity='1';});
 });
 
-(function tick() {
-    rx += (mx - rx) * .11;
-    ry += (my - ry) * .11;
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-    requestAnimationFrame(tick);
-})();
+/* Reveal */
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
-document.querySelectorAll('a,button,[onclick]').forEach(el => {
-    el.addEventListener('mouseenter', () => { dot.style.width='42px'; dot.style.height='42px'; dot.style.opacity='.2'; });
-    el.addEventListener('mouseleave', () => { dot.style.width='7px';  dot.style.height='7px';  dot.style.opacity='1'; });
+/* Back to top */
+window.addEventListener('scroll',()=>document.getElementById('btt').classList.toggle('show',window.scrollY>400));
+
+/* Modals */
+function openSvc(){document.getElementById('svcOverlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeSvc(){document.getElementById('svcOverlay').classList.remove('open');document.body.style.overflow='';}
+function openCalc(){document.getElementById('calcOverlay').classList.add('open');document.body.style.overflow='hidden';calcP();}
+function closeCalc(){document.getElementById('calcOverlay').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('svcOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeSvc();});
+document.getElementById('calcOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeCalc();});
+
+/* Pricing */
+const PR={networking:{b:50,p:25,u:1.5,e:2.5},repairs:{b:30,p:20,u:1.8,e:3},security:{b:100,p:50,u:1.3,e:2},webdev:{b:500,p:200,u:1.4,e:2}};
+function calcP(){
+    const s=document.getElementById('cSvc').value,c=parseInt(document.getElementById('cCnt').value)||1,
+          pri=document.getElementById('cPri').value,el=document.getElementById('estCost');
+    if(!s){el.textContent='$0';return;}
+    let v=PR[s].b+PR[s].p*(c-1);
+    if(pri==='urgent')v*=PR[s].u;if(pri==='emergency')v*=PR[s].e;
+    el.textContent='$'+Math.round(v);
+}
+function getQuote(s){closeSvc();openCalc();document.getElementById('cSvc').value=s;calcP();}
+function bookSvc(){
+    const s=document.getElementById('cSvc').value,c=document.getElementById('cCnt').value,
+          pri=document.getElementById('cPri').value,cost=document.getElementById('estCost').textContent;
+    if(!s){notify('Select a service','Please choose a service type first.');return;}
+    document.getElementById('fservice').value=s;
+    document.getElementById('fmsg').value=`Service: ${s}\nDevices: ${c}\nPriority: ${pri}\nEstimate: ${cost}`;
+    closeCalc();document.getElementById('contact').scrollIntoView({behavior:'smooth'});
+    notify('Added','Details added to the contact form.');
+}
+function showDetail(s){
+    const i={networking:['Computer & Networking','PC repair, network setup, and data recovery.'],
+             repairs:['Phone Repairs','Screen, battery, and water damage repair.'],
+             security:['Cybersecurity','Security audits and data protection.'],
+             webdev:['Web Development','Custom digital experiences, design to deployment.']};
+    if(i[s])notify(i[s][0],i[s][1]);
+}
+function loadTeam(){notify('Our Team','CEO: Mohd Hazami Hasnah — leading HazTech in digital transformation.');}
+
+/* Contact form */
+document.getElementById('ctForm').addEventListener('submit',e=>{
+    e.preventDefault();const b=e.target.querySelector('button[type="submit"]');
+    b.textContent='Sending…';b.disabled=true;
+    setTimeout(()=>{e.target.reset();b.textContent='Send Message';b.disabled=false;notify('Sent',"We'll get back to you shortly.");},1400);
 });
 
-// ── Scroll Reveal ────────────────────────────────────────
-const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
-}, { threshold: .12 });
-document.querySelectorAll('.rv').forEach(el => obs.observe(el));
-
-// ── Back to Top ──────────────────────────────────────────
-const btt = document.getElementById('btt');
-window.addEventListener('scroll', () => {
-    btt.classList.toggle('show', window.scrollY > 400);
-});
-
-// ── Modals ───────────────────────────────────────────────
-function openServices() {
-    document.getElementById('svcModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
-function closeServices() {
-    document.getElementById('svcModal').classList.remove('open');
-    document.body.style.overflow = '';
-}
-function openCalc() {
-    document.getElementById('calcModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    calcPrice();
-}
-function closeCalc() {
-    document.getElementById('calcModal').classList.remove('open');
-    document.body.style.overflow = '';
-}
-
-document.getElementById('svcModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeServices(); });
-document.getElementById('calcModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeCalc(); });
-
-// ── Pricing ──────────────────────────────────────────────
-const pricing = {
-    networking: { base:50,  per:25,  urgent:1.5, emergency:2.5 },
-    repairs:    { base:30,  per:20,  urgent:1.8, emergency:3.0 },
-    security:   { base:100, per:50,  urgent:1.3, emergency:2.0 },
-    webdev:     { base:500, per:200, urgent:1.4, emergency:2.0 }
-};
-
-function calcPrice() {
-    const svc  = document.getElementById('calcSvc').value;
-    const cnt  = parseInt(document.getElementById('devCount').value) || 1;
-    const pri  = document.getElementById('priority').value;
-    const el   = document.getElementById('estCost');
-    if (!svc) { el.textContent = '$0'; return; }
-    const p = pricing[svc];
-    let cost = p.base + p.per * (cnt - 1);
-    if (pri === 'urgent')    cost *= p.urgent;
-    if (pri === 'emergency') cost *= p.emergency;
-    el.textContent = '$' + Math.round(cost);
-}
-
-function getQuote(svc) {
-    closeServices();
-    openCalc();
-    document.getElementById('calcSvc').value = svc;
-    calcPrice();
-}
-
-function bookService() {
-    const svc  = document.getElementById('calcSvc').value;
-    const cnt  = document.getElementById('devCount').value;
-    const pri  = document.getElementById('priority').value;
-    const cost = document.getElementById('estCost').textContent;
-    if (!svc) { notify('Select a service', 'Please choose a service type first.'); return; }
-    document.getElementById('service').value  = svc;
-    document.getElementById('message').value  = `Service: ${svc}\nDevices: ${cnt}\nPriority: ${pri}\nEstimate: ${cost}`;
-    closeCalc();
-    document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
-    notify('Details Added', 'Service info added to the contact form.');
-}
-
-function showDetail(svc) {
-    const info = {
-        networking: ['Computer & Networking', 'PC repair, network setup, data recovery, and system maintenance.'],
-        repairs:    ['Phone Repairs', 'Screen, battery, water damage, and software repair services.'],
-        security:   ['Cybersecurity', 'Security audits, virus removal, and data protection strategies.'],
-        webdev:     ['Web Development', 'Custom digital experiences from design to deployment.']
-    };
-    if (info[svc]) notify(info[svc][0], info[svc][1]);
-}
-
-function loadTeam() {
-    notify('Our Team', 'CEO: Mohd Hazami Hasnah — leading HazTech Digital in digital transformation and cybersecurity.');
-}
-
-// ── Contact Form ─────────────────────────────────────────
-document.getElementById('contactForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-    setTimeout(() => {
-        e.target.reset();
-        btn.textContent = 'Send Message';
-        btn.disabled = false;
-        notify('Message Sent', "We'll get back to you shortly.");
-    }, 1400);
-});
-
-// ── Notifications ────────────────────────────────────────
-function notify(title, msg) {
-    const el = document.createElement('div');
-    el.className = 'notif';
-    el.innerHTML = `<h4>${title}</h4><p>${msg}</p>`;
+/* Notifications */
+function notify(t,m){
+    const el=document.createElement('div');el.className='notif';
+    el.innerHTML=`<h4>${t}</h4><p>${m}</p>`;
     document.getElementById('notifs').appendChild(el);
-    requestAnimationFrame(() => el.classList.add('in'));
-    setTimeout(() => {
-        el.classList.remove('in');
-        setTimeout(() => el.remove(), 420);
-    }, 5000);
+    requestAnimationFrame(()=>el.classList.add('in'));
+    setTimeout(()=>{el.classList.remove('in');setTimeout(()=>el.remove(),420);},5000);
 }
 
-// ── Anchor Scroll ────────────────────────────────────────
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
-    });
-});
+/* Smooth anchors */
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+}));
 </script>
 </body>
 </html>
